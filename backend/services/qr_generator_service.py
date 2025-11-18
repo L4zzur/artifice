@@ -56,7 +56,7 @@ class QRCodeGeneratorService:
 
     @classmethod
     def _ensure_temp_dir(cls):
-        cls.TEMP_DIR.mkdir(exist_ok=True)
+        cls.TEMP_DIR.mkdir(exist_ok=True, parents=True)
 
     @staticmethod
     def _hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
