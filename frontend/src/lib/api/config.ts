@@ -1,8 +1,8 @@
 import { client } from './generated/client.gen';
-import { API_URL } from '$env/static/public';
+import { PUBLIC_API_URL } from '$env/static/public';
 
 client.setConfig({
-  baseUrl: API_URL || 'http://localhost:8000', 
+  baseUrl: PUBLIC_API_URL || 'http://localhost:8000', 
 });
 
 export { client };
