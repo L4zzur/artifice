@@ -1,0 +1,666 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Artifice Toolkit API",
+    "description": "Many useful tools for many purposes",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/v1/qr/generate": {
+      "post": {
+        "tags": [
+          "QR Code Operations"
+        ],
+        "summary": "Generate Qr Code",
+        "description": "Generate QR code with comprehensive styling options\n\n## Features:\n- **Basic QR Generation**: Simple black and white QR codes\n- **Custom Colors**: Fill and background colors\n- **Advanced Styling**: Module drawers (circles, rounded, gapped, etc.)\n- **Gradients**: Radial, square, horizontal, vertical gradients\n- **Embedded Images**: Center logos/images\n- **Multiple Formats**: PNG, SVG, ASCII\n- **Error Correction**: L (7%), M (15%), Q (25%), H (30%)\n- **Custom Eyes**: Styled position markers\n\n## Examples:\n\n### Basic QR Code:\n```\n{\n    \"data\": \"https://example.com\",\n    \"error_correction\": \"M\"\n}\n```\n\n### Styled QR Code with Rounded Corners:\n```\n{\n    \"data\": \"https://example.com\",\n    \"use_styled_image\": true,\n    \"error_correction\": \"H\",\n    \"module_drawer\": {\n        \"type\": \"rounded\",\n        \"radius_ratio\": 0.8\n    },\n    \"color_mask\": {\n        \"type\": \"radial_gradient\",\n        \"center_color\": \"#FF0000\",\n        \"edge_color\": \"#0000FF\"\n    }\n}\n```\n\n### QR Code with Embedded Logo:\n```\n{\n    \"data\": \"https://example.com\",\n    \"use_styled_image\": true,\n    \"error_correction\": \"H\",\n    \"embedded_image\": \"data:image/png;base64,...\"\n}\n```",
+        "operationId": "generate_qr_code_api_v1_qr_generate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QRCodeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QRCodeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/qr/module-drawers": {
+      "get": {
+        "tags": [
+          "QR Code Operations"
+        ],
+        "summary": "List Module Drawers",
+        "operationId": "list_module_drawers_api_v1_qr_module_drawers_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/qr/color-masks": {
+      "get": {
+        "tags": [
+          "QR Code Operations"
+        ],
+        "summary": "List Color Masks",
+        "operationId": "list_color_masks_api_v1_qr_color_masks_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/qr/error-correction-levels": {
+      "get": {
+        "tags": [
+          "QR Code Operations"
+        ],
+        "summary": "List Error Correction",
+        "operationId": "list_error_correction_api_v1_qr_error_correction_levels_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Root",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ColorMaskConfig": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/ColorMaskType",
+            "description": "Type of color mask",
+            "default": "solid"
+          },
+          "front_color": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Front Color",
+            "description": "Front/fill color for solid mask"
+          },
+          "back_color": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Back Color",
+            "description": "Background color"
+          },
+          "center_color": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Center Color",
+            "description": "Center color for radial/square gradients"
+          },
+          "edge_color": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Edge Color",
+            "description": "Edge color for radial/square gradients"
+          },
+          "left_color": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Left Color",
+            "description": "Left color for horizontal gradient"
+          },
+          "right_color": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Right Color",
+            "description": "Right color for horizontal gradient"
+          },
+          "top_color": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Top Color",
+            "description": "Top color for vertical gradient"
+          },
+          "bottom_color": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bottom Color",
+            "description": "Bottom color for vertical gradient"
+          },
+          "color_mask_image": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Color Mask Image",
+            "description": "Base64 encoded image for image color mask"
+          }
+        },
+        "type": "object",
+        "title": "ColorMaskConfig",
+        "description": "Configuration for color mask"
+      },
+      "ColorMaskType": {
+        "type": "string",
+        "enum": [
+          "solid",
+          "radial_gradient",
+          "square_gradient",
+          "horizontal_gradient",
+          "vertical_gradient",
+          "image"
+        ],
+        "title": "ColorMaskType"
+      },
+      "ErrorCorrection": {
+        "type": "string",
+        "enum": [
+          "L",
+          "M",
+          "Q",
+          "H"
+        ],
+        "title": "ErrorCorrection"
+      },
+      "ErrorDetail": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code",
+            "description": "Error code (e.g., 'invalid_embedded_image')"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Human-readable error message"
+          },
+          "context": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Context",
+            "description": "Additional error context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "ErrorDetail"
+      },
+      "ErrorResponse": {
+        "properties": {
+          "detail": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ErrorDetail"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Detail",
+            "description": "Error details: object for custom errors, string for generic errors"
+          }
+        },
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "title": "ErrorResponse"
+      },
+      "EyeDrawerConfig": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/EyeDrawerType",
+            "description": "Type of eye drawer",
+            "default": "square"
+          },
+          "radius_ratio": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Radius Ratio",
+            "description": "Radius ratio for rounded eyes"
+          }
+        },
+        "type": "object",
+        "title": "EyeDrawerConfig",
+        "description": "Configuration for eye (position marker) styling"
+      },
+      "EyeDrawerType": {
+        "type": "string",
+        "enum": [
+          "square",
+          "rounded",
+          "circle"
+        ],
+        "title": "EyeDrawerType"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ModuleDrawerConfig": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/ModuleDrawerType",
+            "description": "Type of module drawer",
+            "default": "square"
+          },
+          "size_ratio": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size Ratio",
+            "description": "Size ratio for gapped styles (0.1-1.0)"
+          },
+          "radius_ratio": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Radius Ratio",
+            "description": "Radius ratio for rounded corners"
+          }
+        },
+        "type": "object",
+        "title": "ModuleDrawerConfig",
+        "description": "Configuration for module drawer styling"
+      },
+      "ModuleDrawerType": {
+        "type": "string",
+        "enum": [
+          "square",
+          "gapped_square",
+          "circle",
+          "rounded",
+          "vertical_bars",
+          "horizontal_bars"
+        ],
+        "title": "ModuleDrawerType"
+      },
+      "OutputFormat": {
+        "type": "string",
+        "enum": [
+          "png",
+          "svg",
+          "svg-path",
+          "svg-fragment",
+          "ascii"
+        ],
+        "title": "OutputFormat"
+      },
+      "QRCodeRequest": {
+        "properties": {
+          "data": {
+            "type": "string",
+            "maxLength": 3000,
+            "minLength": 1,
+            "title": "Data",
+            "description": "The data to be encoded in the QR code"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 40.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "description": "QR code version (1-40), None for auto"
+          },
+          "box_size": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "title": "Box Size",
+            "description": "Size of each box in pixels",
+            "default": 10
+          },
+          "border": {
+            "type": "integer",
+            "maximum": 20.0,
+            "minimum": 0.0,
+            "title": "Border",
+            "description": "Border thickness in boxes (min 4 per spec)",
+            "default": 4
+          },
+          "error_correction": {
+            "$ref": "#/components/schemas/ErrorCorrection",
+            "description": "Error correction level: L(7%), M(15%), Q(25%), H(30%)",
+            "default": "M"
+          },
+          "output_format": {
+            "$ref": "#/components/schemas/OutputFormat",
+            "description": "Output format",
+            "default": "png"
+          },
+          "final_size": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 2000.0,
+                "minimum": 100.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Final Size",
+            "description": "Final image size (for PNG only, after generation)"
+          },
+          "fill_color": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fill Color",
+            "description": "Fill color (basic mode only)"
+          },
+          "back_color": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Back Color",
+            "description": "Background color (basic mode only)"
+          },
+          "use_styled_image": {
+            "type": "boolean",
+            "title": "Use Styled Image",
+            "description": "Use StyledPilImage for advanced styling",
+            "default": false
+          },
+          "module_drawer": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ModuleDrawerConfig"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Module drawer configuration for styled images"
+          },
+          "eye_drawer": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EyeDrawerConfig"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Eye drawer configuration for styled images"
+          },
+          "color_mask": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ColorMaskConfig"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Color mask configuration for styled images"
+          },
+          "embedded_image": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Embedded Image",
+            "description": "Base64 encoded image to embed in center"
+          }
+        },
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "title": "QRCodeRequest"
+      },
+      "QRCodeResponse": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "title": "Image",
+            "description": "Base64 encoded image or SVG/ASCII string"
+          },
+          "format": {
+            "type": "string",
+            "title": "Format",
+            "description": "Output format"
+          },
+          "size": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size",
+            "description": "Image dimensions if applicable"
+          }
+        },
+        "type": "object",
+        "required": [
+          "image",
+          "format"
+        ],
+        "title": "QRCodeResponse"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
