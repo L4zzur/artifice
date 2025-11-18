@@ -37,6 +37,10 @@
     onImageRemove,
     onError,
   }: Props = $props();
+
+  function isBlackBackground(color: string): boolean {
+    return color.toLowerCase() === "#000000" || color.toLowerCase() === "#000";
+  }
 </script>
 
 <SettingsSection h3="Color Style">
@@ -58,6 +62,12 @@
       </FormGroup>
       <FormGroup label="Background Color" id="cm-back">
         <ColorPicker id="cm-back" bind:value={colorMaskBackColor} />
+        {#if isBlackBackground(colorMaskBackColor)}
+          <div class="warning-message">
+            ⚠️ Pure black background will be adjusted to #010101 for QR code
+            visibility
+          </div>
+        {/if}
       </FormGroup>
     </FormRow>
   {/if}
@@ -71,6 +81,15 @@
         <ColorPicker id="cm-edge" bind:value={colorMaskEdgeColor} />
       </FormGroup>
     </FormRow>
+    <FormGroup label="Background Color" id="cm-back-gradient">
+      <ColorPicker id="cm-back-gradient" bind:value={colorMaskBackColor} />
+      {#if isBlackBackground(colorMaskBackColor)}
+        <div class="warning-message">
+          ⚠️ Pure black background will be adjusted to #010101 for QR code
+          visibility
+        </div>
+      {/if}
+    </FormGroup>
   {/if}
 
   {#if colorMaskType === "vertical_gradient"}
@@ -82,6 +101,15 @@
         <ColorPicker id="cm-bottom" bind:value={colorMaskBottomColor} />
       </FormGroup>
     </FormRow>
+    <FormGroup label="Background Color" id="cm-back-vertical">
+      <ColorPicker id="cm-back-vertical" bind:value={colorMaskBackColor} />
+      {#if isBlackBackground(colorMaskBackColor)}
+        <div class="warning-message">
+          ⚠️ Pure black background will be adjusted to #010101 for QR code
+          visibility
+        </div>
+      {/if}
+    </FormGroup>
   {/if}
 
   {#if colorMaskType === "horizontal_gradient"}
@@ -93,6 +121,15 @@
         <ColorPicker id="cm-right" bind:value={colorMaskRightColor} />
       </FormGroup>
     </FormRow>
+    <FormGroup label="Background Color" id="cm-back-horizontal">
+      <ColorPicker id="cm-back-horizontal" bind:value={colorMaskBackColor} />
+      {#if isBlackBackground(colorMaskBackColor)}
+        <div class="warning-message">
+          ⚠️ Pure black background will be adjusted to #010101 for QR code
+          visibility
+        </div>
+      {/if}
+    </FormGroup>
   {/if}
 
   {#if colorMaskType === "image"}

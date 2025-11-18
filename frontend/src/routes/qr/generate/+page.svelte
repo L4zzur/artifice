@@ -118,6 +118,16 @@
     colorMaskImagePreview = null;
   }
 
+  const adjustBackgroundColor = (color: string): string => {
+    if (color.toLowerCase() === "#000000" || color.toLowerCase() === "#000") {
+      showToast(
+        "ℹ️ Background color adjusted to #010101 for better QR code visibility",
+      );
+      return "#010101";
+    }
+    return color;
+  };
+
   async function handleGenerate() {
     if (!qrData.trim()) {
       error = "Please enter data to encode";
@@ -169,36 +179,33 @@
         switch (colorMaskType) {
           case "solid":
             request.color_mask.front_color = colorMaskFrontColor;
-            request.color_mask.back_color = colorMaskBackColor;
+            request.color_mask.back_color =
+              adjustBackgroundColor(colorMaskBackColor);
             break;
           case "radial_gradient":
           case "square_gradient":
             request.color_mask.center_color = colorMaskCenterColor;
             request.color_mask.edge_color = colorMaskEdgeColor;
-            request.color_mask.back_color = colorMaskBackColor;
+            request.color_mask.back_color =
+              adjustBackgroundColor(colorMaskBackColor);
             break;
           case "horizontal_gradient":
             request.color_mask.left_color = colorMaskLeftColor;
             request.color_mask.right_color = colorMaskRightColor;
-            request.color_mask.back_color = colorMaskBackColor;
+            request.color_mask.back_color =
+              adjustBackgroundColor(colorMaskBackColor);
             break;
           case "vertical_gradient":
             request.color_mask.top_color = colorMaskTopColor;
             request.color_mask.bottom_color = colorMaskBottomColor;
-            request.color_mask.back_color = colorMaskBackColor;
+            request.color_mask.back_color =
+              adjustBackgroundColor(colorMaskBackColor);
             break;
           case "image":
             if (colorMaskImageBase64) {
               request.color_mask.color_mask_image = colorMaskImageBase64;
-              request.color_mask.back_color = colorMaskBackColor;
-              if (colorMaskBackColor === "#000000") {
-                request.color_mask.back_color = "#010101"; // Почти чёрный, но не совсем
-                showToast(
-                  "ℹ️ Background color adjusted to #010101 for better QR code visibility",
-                );
-              } else {
-                request.color_mask.back_color = colorMaskBackColor;
-              }
+              request.color_mask.back_color =
+                adjustBackgroundColor(colorMaskBackColor);
             } else {
               error = "Please upload a pattern image for Image Pattern mode";
               isLoading = false;
