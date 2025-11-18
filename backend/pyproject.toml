@@ -9,5 +9,6 @@ dependencies = [
     "pillow>=12.0.0",
     "pydantic-settings>=2.12.0",
     "qrcode[pil]>=8.2",
+    "qrlyzer>=0.2.6",
     "uvicorn>=0.38.0",
 ]
