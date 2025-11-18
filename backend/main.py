@@ -1,7 +1,7 @@
-from api.v1 import api_router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from api.v1 import api_router
 from core.config import settings
 
 app = FastAPI(
@@ -30,6 +30,12 @@ async def root():
         "docs": "/docs",
         "openapi": "/openapi.json",
     }
+
+
+@app.get("/health")
+@app.head("/health")
+async def health_check():
+    return {"status": "healthy"}
 
 
 if __name__ == "__main__":
