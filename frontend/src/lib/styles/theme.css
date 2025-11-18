@@ -1,0 +1,89 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap");
+
+:root {
+  /* Base palette color */
+  --seed-color: #6a5acd;
+
+  /* Primary colors */
+  --md-sys-color-primary: #b0c4de;
+  --md-sys-color-on-primary: #001f3f;
+  --md-sys-color-primary-container: #46507c;
+  --md-sys-color-on-primary-container: #d8deff;
+
+  /* Secondary colors */
+  --md-sys-color-secondary: #c8a2c8;
+  --md-sys-color-on-secondary: #301934;
+  --md-sys-color-secondary-container: #5a3b5d;
+  --md-sys-color-on-secondary-container: #f5dfff;
+
+  /* Tertiary colors */
+  --md-sys-color-tertiary: #a0d2db;
+  --md-sys-color-on-tertiary: #002025;
+  --md-sys-color-tertiary-container: #30505a;
+  --md-sys-color-on-tertiary-container: #d0e8ef;
+
+  /* Surface colors */
+  --md-sys-color-surface: #12121a;
+  --md-sys-color-on-surface: #eaeaf2;
+  --md-sys-color-surface-variant: #3a3a4a;
+  --md-sys-color-on-surface-variant: #c4c6cf;
+
+  /* Surface container colors */
+  --md-sys-color-surface-container-lowest: #0d0d12;
+  --md-sys-color-surface-container-low: #1a1a24;
+  --md-sys-color-surface-container: #1e1e29;
+  --md-sys-color-surface-container-high: #292935;
+  --md-sys-color-surface-container-highest: #353543;
+
+  /* Background colors */
+  --md-sys-color-background: #0f0f14;
+  --md-sys-color-on-background: #eaeaf2;
+
+  /* Outline colors */
+  --md-sys-color-outline: #8e8e9e;
+  --md-sys-color-outline-variant: #444452;
+
+  /* Error colors */
+  --md-sys-color-error: #f2b8b5;
+  --md-sys-color-error-container: #8c1d18;
+  --md-sys-color-on-error: #601410;
+  --md-sys-color-on-error-container: #f9dedc;
+
+  /* Shadows */
+  --md-sys-elevation-level1-shadow:
+    0px 1px 3px 1px hsla(0, 0%, 0%, 0.15), 0px 1px 2px 0px hsla(0, 0%, 0%, 0.3);
+  --md-sys-elevation-level2-shadow:
+    0px 2px 6px 2px hsla(0, 0%, 0%, 0.15), 0px 1px 2px 0px hsla(0, 0%, 0%, 0.3);
+  --md-sys-elevation-level3-shadow:
+    0px 1px 3px 0px hsla(0, 0%, 0%, 0.3), 0px 4px 8px 3px hsla(0, 0%, 0%, 0.15);
+
+  /* Corners */
+  --md-sys-shape-corner-none: 0px;
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-full: 9999px;
+
+  /* Typography */
+  --md-sys-typescale-font-family: "Noto Sans", sans-serif;
+
+  /* Animation */
+  --md-sys-animation-standard: 300ms cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-animation-emphasized: 500ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Global reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--md-sys-typescale-font-family);
+  background: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+  min-height: 100vh;
+}
