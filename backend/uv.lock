@@ -1,6 +1,12 @@
 version = 1
 revision = 3
 requires-python = ">=3.13"
+resolution-markers = [
+    "sys_platform == 'darwin'",
+    "platform_machine == 'aarch64' and sys_platform == 'linux'",
+    "sys_platform == 'win32'",
+    "(platform_machine != 'aarch64' and sys_platform == 'linux') or (sys_platform != 'darwin' and sys_platform != 'linux' and sys_platform != 'win32')",
+]
 
 [[package]]
 name = "annotated-doc"
@@ -42,6 +48,7 @@ dependencies = [
     { name = "pillow" },
     { name = "pydantic-settings" },
     { name = "qrcode", extra = ["pil"] },
+    { name = "qrlyzer" },
     { name = "uvicorn" },
 ]
 
@@ -51,6 +58,7 @@ requires-dist = [
     { name = "pillow", specifier = ">=12.0.0" },
     { name = "pydantic-settings", specifier = ">=2.12.0" },
     { name = "qrcode", extras = ["pil"], specifier = ">=8.2" },
+    { name = "qrlyzer", specifier = ">=0.2.6" },
     { name = "uvicorn", specifier = ">=0.38.0" },
 ]
 
@@ -272,6 +280,32 @@ wheels = [
 [package.optional-dependencies]
 pil = [
     { name = "pillow" },
+]
+
+[[package]]
+name = "qrlyzer"
+version = "0.2.6"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/4a/9c/9d62b9fdc8b4b16af9f1de7a254503a068112630085de1e275764a78326f/qrlyzer-0.2.6.tar.gz", hash = "sha256:5dd4bfd5a609835f2bea9377f6011f9ad29169fea82444950637429a45946a1a", size = 263153, upload-time = "2025-04-18T17:43:13.485Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7f/69/5d5fd302d68f6659bef3d210f0397491d97d51db9822e3ce4dadad45a0e5/qrlyzer-0.2.6-cp313-cp313-macosx_10_15_x86_64.whl", hash = "sha256:87dbca90701a5610193bb6fa1e6e176b9e50660b92d05e6185c17c16acfae905", size = 2191232, upload-time = "2025-04-18T17:41:39.424Z" },
+    { url = "https://files.pythonhosted.org/packages/29/e3/4e7a484585b6c2863ed929f44564f317f6591d1f522ee7f67afc2a0a5a75/qrlyzer-0.2.6-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:ba06a58598b357a42d0b3ac4905416d486f285e7e611a0bf666949aa576aab2d", size = 1627596, upload-time = "2025-04-18T17:41:33.746Z" },
+    { url = "https://files.pythonhosted.org/packages/bf/a2/8bed85b09b6f9b118fd028f01d838bc92be0f855648a2a377baffe9be79d/qrlyzer-0.2.6-cp313-cp313-manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:89b91b44ae2c507a0a3a637d94236d66f5bad183f6ca39d5287bc2db7c38945b", size = 1849100, upload-time = "2025-04-18T17:41:08.566Z" },
+    { url = "https://files.pythonhosted.org/packages/ce/8c/fbba139a21f43dc70aaa83a0925d7cd5ba66df39214702d6608b76b77c91/qrlyzer-0.2.6-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d59f181fcf9b55f4bc9491e29522747f36c658e4bd3e0713e71f208bdfc8ea23", size = 1708823, upload-time = "2025-04-18T17:40:35.138Z" },
+    { url = "https://files.pythonhosted.org/packages/80/99/aae6f9aeff78bad799418b93221ffe76f7c910c59871a81a46df7fd31c6b/qrlyzer-0.2.6-cp313-cp313-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:213e68884005066894a06b03c6427e8eef38c4fde9518c5c186afe0c0aeb9954", size = 1767945, upload-time = "2025-04-18T17:40:51.451Z" },
+    { url = "https://files.pythonhosted.org/packages/68/de/4f272bc77d28368a6063246efd97178ddf01ba5bf28a5a65ff8900b76d9a/qrlyzer-0.2.6-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d6e7eb6d8e2f2d17fb417b93c1263e8ed19dcad532f16cdde339faf439632145", size = 2275321, upload-time = "2025-04-18T17:41:22.473Z" },
+    { url = "https://files.pythonhosted.org/packages/1d/1e/98dc7550c4663894fc7fbf2b1d5d4004d82451cb6c42e609980ca2c9b127/qrlyzer-0.2.6-cp313-cp313-musllinux_1_2_aarch64.whl", hash = "sha256:08bd3ad405a0823c51cb5bd1bd7e21fed066d58386228b18df4d6505736c4cbd", size = 1887444, upload-time = "2025-04-18T17:41:47.602Z" },
+    { url = "https://files.pythonhosted.org/packages/86/e0/3eabaa7dc1c7203824040d8aa4321efbb0558553cf9ee32617407393a1ae/qrlyzer-0.2.6-cp313-cp313-musllinux_1_2_armv7l.whl", hash = "sha256:5a23788dc269873491397dacaf629533d60ee85aafbad985bcad19534549f437", size = 2029657, upload-time = "2025-04-18T17:42:04.545Z" },
+    { url = "https://files.pythonhosted.org/packages/b0/a2/44468f2479d9254e8cede1a51e8422e8037f5a806ef14867d931091c0b3e/qrlyzer-0.2.6-cp313-cp313-musllinux_1_2_i686.whl", hash = "sha256:2f07e2a6b9e126608103389fe05c442a8f2bc1ff440fc70dbc40bfca280bfdce", size = 1993761, upload-time = "2025-04-18T17:42:22.712Z" },
+    { url = "https://files.pythonhosted.org/packages/71/7c/e25b7a14e5595e958bc03aba975d419dc9981db4fc2b4608a97049f1eab2/qrlyzer-0.2.6-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:16ab2fadd50530519841ff61b00bce3842d65942a4c0b97cd468f7294ce8da43", size = 2449427, upload-time = "2025-04-18T17:42:41.818Z" },
+    { url = "https://files.pythonhosted.org/packages/8a/ed/a12624d9bacc79d64a3492b2fa136ea5843cabe22d76076cfb259fd99be7/qrlyzer-0.2.6-cp313-cp313-win32.whl", hash = "sha256:27392b6d4cf3b5f38661067ede296fbaf4b63c43ffdef8252fb67097053415e8", size = 1585862, upload-time = "2025-04-18T17:43:09.768Z" },
+    { url = "https://files.pythonhosted.org/packages/53/60/1dfff4d7f8020147f03111936cca1258d623c7412a70309974ec6a29b674/qrlyzer-0.2.6-cp313-cp313-win_amd64.whl", hash = "sha256:95bea9bb0185cd75ea7878a08116e7ffc6d1f50b583a133a64424aa9f7cbaeb0", size = 2050209, upload-time = "2025-04-18T17:43:00.727Z" },
+    { url = "https://files.pythonhosted.org/packages/bd/02/a20f8f6dc8c8bf45cd87b33798d29bda593749a79e3c436a2ffbb5cf2f26/qrlyzer-0.2.6-cp313-cp313t-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:c0f485ea144fb9f25f37dc537de4bfddf29587c468f1403e04caf1efd4590bf4", size = 1709784, upload-time = "2025-04-18T17:40:36.818Z" },
+    { url = "https://files.pythonhosted.org/packages/30/93/b9d5f59fdc845cb0d0d73d200ce094f2d8829d4f5be9b8f3f30370709551/qrlyzer-0.2.6-cp313-cp313t-manylinux_2_17_armv7l.manylinux2014_armv7l.whl", hash = "sha256:5cdbe438b1a96d9b40febfcf615e191fc2c4090cab4eff06809696f26503b5a7", size = 1767107, upload-time = "2025-04-18T17:40:53.924Z" },
+    { url = "https://files.pythonhosted.org/packages/aa/da/578f8cc20396d1874aa5adcd7c664cf47769c5130b4210c99c321ca7dce6/qrlyzer-0.2.6-cp313-cp313t-musllinux_1_2_aarch64.whl", hash = "sha256:34715d04c2f35d2db06c13f772d03c134445060a7d8aab11e699e9c34c526537", size = 1887663, upload-time = "2025-04-18T17:41:49.433Z" },
+    { url = "https://files.pythonhosted.org/packages/f9/a2/c1284d0434007449cb4be80d7bee1be6c32a7ef20e930936d43b79f52a0c/qrlyzer-0.2.6-cp313-cp313t-musllinux_1_2_armv7l.whl", hash = "sha256:ff58c76712faabb88f8a386f71807af1096937cc8f5985cb4145a752533919e2", size = 2029109, upload-time = "2025-04-18T17:42:06.315Z" },
+    { url = "https://files.pythonhosted.org/packages/d6/76/40c482ea532b9957c67bd7b6c95128a39bedb27e904078672138e0a0a008/qrlyzer-0.2.6-cp313-cp313t-musllinux_1_2_i686.whl", hash = "sha256:ec7efe1bc13b921b9761abf3666f9d8c12666f949ad2637f87312555a684dae4", size = 1993683, upload-time = "2025-04-18T17:42:24.565Z" },
+    { url = "https://files.pythonhosted.org/packages/bd/f5/5f5c317f235c58c852a083bdf4424ef381e505220a4c1ae9bfc302dad8ca/qrlyzer-0.2.6-cp313-cp313t-musllinux_1_2_x86_64.whl", hash = "sha256:8cf166635c31735c5f5e59482320c0a3e44ae69bcd06a0730d7f501a5c9faf12", size = 2448818, upload-time = "2025-04-18T17:42:43.784Z" },
 ]
 
 [[package]]

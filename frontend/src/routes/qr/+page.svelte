@@ -6,15 +6,16 @@
     {
       icon: CirclePlus,
       title: "QR Code Generator",
-      description: "Create QR code with customizable settings",
+      description: "Create customizable QR codes with image support",
       href: "/qr/generate",
+      comingSoon: false,
     },
     {
       icon: ScanBarcode,
       title: "QR Code Scanner",
       description: "Scan QR code to get information",
       href: "/qr/scan",
-      comingSoon: true,
+      comingSoon: false,
     },
   ];
 </script>

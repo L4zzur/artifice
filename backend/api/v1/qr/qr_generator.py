@@ -3,17 +3,17 @@ from logging import getLogger
 from fastapi import APIRouter, HTTPException
 
 from schemas.error import ErrorResponse
-from schemas.qr import QRCodeRequest, QRCodeResponse
+from schemas.qr_generator import QRCodeRequest, QRCodeResponse
 from services.exceptions import QRCodeError
 from services.qr_generator_service import QRCodeGeneratorService
 
-router = APIRouter(prefix="/qr", tags=["QR Code Operations"])
+router = APIRouter(prefix="/generate")
 
 logger = getLogger(__name__)
 
 
 @router.post(
-    "/generate",
+    "",
     response_model=QRCodeResponse,
     responses={
         400: {"model": ErrorResponse, "description": "Bad Request"},

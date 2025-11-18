@@ -6,6 +6,7 @@
     ChevronDown,
     ChevronRight,
     CirclePlus,
+    Scan,
   } from "lucide-svelte";
 
   interface MenuItem {
@@ -31,7 +32,10 @@
       name: "QR Code",
       icon: QrCode,
       href: "/qr",
-      children: [{ name: "Generator", path: "generate", icon: CirclePlus }],
+      children: [
+        { name: "Generator", path: "generate", icon: CirclePlus },
+        { name: "Scanner", path: "scan", icon: Scan },
+      ],
     },
   ];
 

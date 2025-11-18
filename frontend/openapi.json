@@ -68,13 +68,13 @@
         }
       }
     },
-    "/api/v1/qr/module-drawers": {
+    "/api/v1/qr/generate/module-drawers": {
       "get": {
         "tags": [
           "QR Code Operations"
         ],
         "summary": "List Module Drawers",
-        "operationId": "list_module_drawers_api_v1_qr_module_drawers_get",
+        "operationId": "list_module_drawers_api_v1_qr_generate_module_drawers_get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -87,13 +87,13 @@
         }
       }
     },
-    "/api/v1/qr/color-masks": {
+    "/api/v1/qr/generate/color-masks": {
       "get": {
         "tags": [
           "QR Code Operations"
         ],
         "summary": "List Color Masks",
-        "operationId": "list_color_masks_api_v1_qr_color_masks_get",
+        "operationId": "list_color_masks_api_v1_qr_generate_color_masks_get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -106,19 +106,91 @@
         }
       }
     },
-    "/api/v1/qr/error-correction-levels": {
+    "/api/v1/qr/generate/error-correction-levels": {
       "get": {
         "tags": [
           "QR Code Operations"
         ],
         "summary": "List Error Correction",
-        "operationId": "list_error_correction_api_v1_qr_error_correction_levels_get",
+        "operationId": "list_error_correction_api_v1_qr_generate_error_correction_levels_get",
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/qr/scan": {
+      "post": {
+        "tags": [
+          "QR Code Operations"
+        ],
+        "summary": "Scan Qr Code",
+        "description": "Scan and decode QR code(s) from an image using qrlyzer\n\n## Features:\n- **Lightning Fast**: Rust-based QR detection (rqrr + rxing)\n- **Multiple QR Codes**: Detects and decodes multiple QR codes in one image\n- **Auto-Resize**: Automatically scales images (100px-1280px) for optimal detection\n- **High Accuracy**: Works with various QR code sizes and qualities\n- **Lightweight**: Minimal dependencies, perfect for small VPS deployments\n- **Multiple Formats**: Supports PNG, JPG, WEBP, and other common formats\n\n## Auto-Resize Feature:\n\nWhen enabled (default), the image is automatically resized in 5 steps from 100px\nto 1280px in the largest direction.\nThis improves both accuracy and speed, especially for:\n- Large images with small QR codes\n- High-resolution photos\n- Images with multiple QR codes at different scales\n\n## Example Request:\n\n```\n{\n    \"image\": \"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgA...\",\n    \"auto_resize\": true\n}\n```\n\n## Example Response:\n\n```\n{\n    \"codes\": [\n        \"https://example.com\",\n        \"Hello, World!\"\n    ],\n    \"count\": 2,\n    \"success\": true\n}\n```",
+        "operationId": "scan_qr_code_api_v1_qr_scan_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QRScanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QRScanResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No QR Code Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
               }
             }
           }
@@ -129,6 +201,36 @@
       "get": {
         "summary": "Root",
         "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      },
+      "head": {
+        "summary": "Health Check",
+        "operationId": "health_check_health_head",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -627,6 +729,55 @@
           "format"
         ],
         "title": "QRCodeResponse"
+      },
+      "QRScanRequest": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "title": "Image",
+            "description": "Base64 encoded image containing QR code"
+          },
+          "auto_resize": {
+            "type": "boolean",
+            "title": "Auto Resize",
+            "description": "Enable automatic image resizing for better detection",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "title": "QRScanRequest"
+      },
+      "QRScanResponse": {
+        "properties": {
+          "codes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Codes",
+            "description": "List of decoded QR codes found in the image"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count",
+            "description": "Number of QR codes detected"
+          },
+          "success": {
+            "type": "boolean",
+            "title": "Success",
+            "description": "Whether scan was successful"
+          }
+        },
+        "type": "object",
+        "required": [
+          "codes",
+          "count",
+          "success"
+        ],
+        "title": "QRScanResponse"
       },
       "ValidationError": {
         "properties": {

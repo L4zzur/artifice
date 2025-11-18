@@ -73,6 +73,7 @@
 
   .header-icon {
     padding: 0.75rem;
+    display: flex;
     background: var(--md-sys-color-surface-container-high);
     border-radius: var(--md-sys-shape-corner-medium);
     color: var(--md-sys-color-primary);

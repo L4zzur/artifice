@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from .qr_generator import router as qr_router
+from .qr import api_router as qr_router
 
 api_router = APIRouter(prefix="/api/v1")
 

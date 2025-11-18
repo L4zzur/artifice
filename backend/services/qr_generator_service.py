@@ -33,7 +33,7 @@ from qrcode.image.styles.moduledrawers.pil import (
     VerticalBarsDrawer,
 )
 
-from schemas.qr import (
+from schemas.qr_generator import (
     ColorMaskConfig,
     EyeDrawerConfig,
     ModuleDrawerConfig,
