@@ -17,6 +17,7 @@ RUN uv export --format requirements-txt --no-hashes --no-dev -o ./requirements.t
 FROM python:${PYTHON_TAG}
 WORKDIR /app
 RUN apk add --no-cache build-base
+RUN apk add --no-cache wget
 COPY --from=dependencies /app/requirements.txt ./requirements.txt
 RUN pip install --upgrade pip && \
     pip install --no-cache -r ./requirements.txt
@@ -28,6 +29,5 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 EXPOSE 8000
-
 
 #CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
