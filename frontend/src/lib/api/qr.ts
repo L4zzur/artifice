@@ -1,6 +1,6 @@
 import './config';
 
-import { generateQrCodeApiV1QrGeneratePost } from './generated/sdk.gen';
+import { generateQrCodeApiV1QrGeneratePost, scanQrCodeApiV1QrScanPost } from './generated/sdk.gen';
 import type {
   QrCodeRequest,
   QrCodeResponse,
@@ -11,11 +11,17 @@ import type {
   ModuleDrawerConfig,
   EyeDrawerConfig,
   ColorMaskConfig,
+  QrScanRequest,
+  QrScanResponse
 } from './generated/types.gen';
 
 export type QRCodeRequest = QrCodeRequest;
 export type QRCodeResponse = QrCodeResponse;
 export type ErrorCorrectionLevel = ErrorCorrection;
+
+export type QRScanRequest = QrScanRequest;
+export type QRScanResponse = QrScanResponse;
+
 export type { 
   ModuleDrawerType, 
   EyeDrawerType, 
@@ -25,6 +31,13 @@ export type {
   ColorMaskConfig,
 };
 
+/**
+ * Generate QR code with comprehensive styling options
+ * 
+ * @param params - QR code generation parameters
+ * @returns Promise<QRCodeResponse> - Generated QR code data
+ * @throws Error if generation fails
+ */
 export async function generateQRCode(params: QRCodeRequest): Promise<QRCodeResponse> {
   try {
     const response = await generateQrCodeApiV1QrGeneratePost({
@@ -45,6 +58,47 @@ export async function generateQRCode(params: QRCodeRequest): Promise<QRCodeRespo
   }
 }
 
+/**
+ * Scan and decode QR code(s) from an image
+ * 
+ * @param params - Scan request parameters (image base64, auto_resize)
+ * @returns Promise<QRScanResponse> - Decoded QR codes
+ * @throws Error if scan fails or no QR codes found
+ * 
+ * @example
+ * ```
+ * const result = await scanQRCode({
+ *   image: "data:image/png;base64,iVBORw0KGg...",
+ *   auto_resize: true
+ * });
+ * 
+ * console.log(`Found ${result.count} QR code(s):`);
+ * result.codes.forEach(code => console.log(code));
+ * ```
+ */
+export async function scanQRCode(params: QRScanRequest): Promise<QRScanResponse> {
+  try {
+    const response = await scanQrCodeApiV1QrScanPost({
+      body: params,
+    });
+
+    if (response.error) {
+      handleApiError(response.error);
+    }
+
+    if (!response.data) {
+      throw new Error('No data received from server');
+    }
+
+    return response.data;
+  } catch (err) {
+    throw err;
+  }
+}
+
+/**
+ * Handle API errors and throw user-friendly messages
+ */
 function handleApiError(error: any): never {
   const detail = error.detail;
 

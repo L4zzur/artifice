@@ -309,6 +309,48 @@ export type QrCodeResponse = {
 };
 
 /**
+ * QRScanRequest
+ */
+export type QrScanRequest = {
+  /**
+   * Image
+   *
+   * Base64 encoded image containing QR code
+   */
+  image: string;
+  /**
+   * Auto Resize
+   *
+   * Enable automatic image resizing for better detection
+   */
+  auto_resize?: boolean;
+};
+
+/**
+ * QRScanResponse
+ */
+export type QrScanResponse = {
+  /**
+   * Codes
+   *
+   * List of decoded QR codes found in the image
+   */
+  codes: Array<string>;
+  /**
+   * Count
+   *
+   * Number of QR codes detected
+   */
+  count: number;
+  /**
+   * Success
+   *
+   * Whether scan was successful
+   */
+  success: boolean;
+};
+
+/**
  * ValidationError
  */
 export type ValidationError = {
@@ -361,47 +403,87 @@ export type GenerateQrCodeApiV1QrGeneratePostResponses = {
 export type GenerateQrCodeApiV1QrGeneratePostResponse =
   GenerateQrCodeApiV1QrGeneratePostResponses[keyof GenerateQrCodeApiV1QrGeneratePostResponses];
 
-export type ListModuleDrawersApiV1QrModuleDrawersGetData = {
+export type ListModuleDrawersApiV1QrGenerateModuleDrawersGetData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/api/v1/qr/module-drawers";
+  url: "/api/v1/qr/generate/module-drawers";
 };
 
-export type ListModuleDrawersApiV1QrModuleDrawersGetResponses = {
+export type ListModuleDrawersApiV1QrGenerateModuleDrawersGetResponses = {
   /**
    * Successful Response
    */
   200: unknown;
 };
 
-export type ListColorMasksApiV1QrColorMasksGetData = {
+export type ListColorMasksApiV1QrGenerateColorMasksGetData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/api/v1/qr/color-masks";
+  url: "/api/v1/qr/generate/color-masks";
 };
 
-export type ListColorMasksApiV1QrColorMasksGetResponses = {
+export type ListColorMasksApiV1QrGenerateColorMasksGetResponses = {
   /**
    * Successful Response
    */
   200: unknown;
 };
 
-export type ListErrorCorrectionApiV1QrErrorCorrectionLevelsGetData = {
+export type ListErrorCorrectionApiV1QrGenerateErrorCorrectionLevelsGetData = {
   body?: never;
   path?: never;
   query?: never;
-  url: "/api/v1/qr/error-correction-levels";
+  url: "/api/v1/qr/generate/error-correction-levels";
 };
 
-export type ListErrorCorrectionApiV1QrErrorCorrectionLevelsGetResponses = {
+export type ListErrorCorrectionApiV1QrGenerateErrorCorrectionLevelsGetResponses =
+  {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+  };
+
+export type ScanQrCodeApiV1QrScanPostData = {
+  body: QrScanRequest;
+  path?: never;
+  query?: never;
+  url: "/api/v1/qr/scan";
+};
+
+export type ScanQrCodeApiV1QrScanPostErrors = {
+  /**
+   * Bad Request
+   */
+  400: ErrorResponse;
+  /**
+   * No QR Code Found
+   */
+  404: ErrorResponse;
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type ScanQrCodeApiV1QrScanPostError =
+  ScanQrCodeApiV1QrScanPostErrors[keyof ScanQrCodeApiV1QrScanPostErrors];
+
+export type ScanQrCodeApiV1QrScanPostResponses = {
   /**
    * Successful Response
    */
-  200: unknown;
+  200: QrScanResponse;
 };
+
+export type ScanQrCodeApiV1QrScanPostResponse =
+  ScanQrCodeApiV1QrScanPostResponses[keyof ScanQrCodeApiV1QrScanPostResponses];
 
 export type RootGetData = {
   body?: never;
@@ -411,6 +493,34 @@ export type RootGetData = {
 };
 
 export type RootGetResponses = {
+  /**
+   * Successful Response
+   */
+  200: unknown;
+};
+
+export type HealthCheckHealthGetData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/health";
+};
+
+export type HealthCheckHealthGetResponses = {
+  /**
+   * Successful Response
+   */
+  200: unknown;
+};
+
+export type HealthCheckHealthHeadData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/health";
+};
+
+export type HealthCheckHealthHeadResponses = {
   /**
    * Successful Response
    */

@@ -6,14 +6,21 @@ import type {
   GenerateQrCodeApiV1QrGeneratePostData,
   GenerateQrCodeApiV1QrGeneratePostErrors,
   GenerateQrCodeApiV1QrGeneratePostResponses,
-  ListColorMasksApiV1QrColorMasksGetData,
-  ListColorMasksApiV1QrColorMasksGetResponses,
-  ListErrorCorrectionApiV1QrErrorCorrectionLevelsGetData,
-  ListErrorCorrectionApiV1QrErrorCorrectionLevelsGetResponses,
-  ListModuleDrawersApiV1QrModuleDrawersGetData,
-  ListModuleDrawersApiV1QrModuleDrawersGetResponses,
+  HealthCheckHealthGetData,
+  HealthCheckHealthGetResponses,
+  HealthCheckHealthHeadData,
+  HealthCheckHealthHeadResponses,
+  ListColorMasksApiV1QrGenerateColorMasksGetData,
+  ListColorMasksApiV1QrGenerateColorMasksGetResponses,
+  ListErrorCorrectionApiV1QrGenerateErrorCorrectionLevelsGetData,
+  ListErrorCorrectionApiV1QrGenerateErrorCorrectionLevelsGetResponses,
+  ListModuleDrawersApiV1QrGenerateModuleDrawersGetData,
+  ListModuleDrawersApiV1QrGenerateModuleDrawersGetResponses,
   RootGetData,
   RootGetResponses,
+  ScanQrCodeApiV1QrScanPostData,
+  ScanQrCodeApiV1QrScanPostErrors,
+  ScanQrCodeApiV1QrScanPostResponses,
 } from "./types.gen";
 
 export type Options<
@@ -108,17 +115,20 @@ export const generateQrCodeApiV1QrGeneratePost = <
 /**
  * List Module Drawers
  */
-export const listModuleDrawersApiV1QrModuleDrawersGet = <
+export const listModuleDrawersApiV1QrGenerateModuleDrawersGet = <
   ThrowOnError extends boolean = false,
 >(
-  options?: Options<ListModuleDrawersApiV1QrModuleDrawersGetData, ThrowOnError>,
+  options?: Options<
+    ListModuleDrawersApiV1QrGenerateModuleDrawersGetData,
+    ThrowOnError
+  >,
 ) => {
   return (options?.client ?? client).get<
-    ListModuleDrawersApiV1QrModuleDrawersGetResponses,
+    ListModuleDrawersApiV1QrGenerateModuleDrawersGetResponses,
     unknown,
     ThrowOnError
   >({
-    url: "/api/v1/qr/module-drawers",
+    url: "/api/v1/qr/generate/module-drawers",
     ...options,
   });
 };
@@ -126,17 +136,20 @@ export const listModuleDrawersApiV1QrModuleDrawersGet = <
 /**
  * List Color Masks
  */
-export const listColorMasksApiV1QrColorMasksGet = <
+export const listColorMasksApiV1QrGenerateColorMasksGet = <
   ThrowOnError extends boolean = false,
 >(
-  options?: Options<ListColorMasksApiV1QrColorMasksGetData, ThrowOnError>,
+  options?: Options<
+    ListColorMasksApiV1QrGenerateColorMasksGetData,
+    ThrowOnError
+  >,
 ) => {
   return (options?.client ?? client).get<
-    ListColorMasksApiV1QrColorMasksGetResponses,
+    ListColorMasksApiV1QrGenerateColorMasksGetResponses,
     unknown,
     ThrowOnError
   >({
-    url: "/api/v1/qr/color-masks",
+    url: "/api/v1/qr/generate/color-masks",
     ...options,
   });
 };
@@ -144,21 +157,82 @@ export const listColorMasksApiV1QrColorMasksGet = <
 /**
  * List Error Correction
  */
-export const listErrorCorrectionApiV1QrErrorCorrectionLevelsGet = <
+export const listErrorCorrectionApiV1QrGenerateErrorCorrectionLevelsGet = <
   ThrowOnError extends boolean = false,
 >(
   options?: Options<
-    ListErrorCorrectionApiV1QrErrorCorrectionLevelsGetData,
+    ListErrorCorrectionApiV1QrGenerateErrorCorrectionLevelsGetData,
     ThrowOnError
   >,
 ) => {
   return (options?.client ?? client).get<
-    ListErrorCorrectionApiV1QrErrorCorrectionLevelsGetResponses,
+    ListErrorCorrectionApiV1QrGenerateErrorCorrectionLevelsGetResponses,
     unknown,
     ThrowOnError
   >({
-    url: "/api/v1/qr/error-correction-levels",
+    url: "/api/v1/qr/generate/error-correction-levels",
     ...options,
+  });
+};
+
+/**
+ * Scan Qr Code
+ *
+ * Scan and decode QR code(s) from an image using qrlyzer
+ *
+ * ## Features:
+ * - **Lightning Fast**: Rust-based QR detection (rqrr + rxing)
+ * - **Multiple QR Codes**: Detects and decodes multiple QR codes in one image
+ * - **Auto-Resize**: Automatically scales images (100px-1280px) for optimal detection
+ * - **High Accuracy**: Works with various QR code sizes and qualities
+ * - **Lightweight**: Minimal dependencies, perfect for small VPS deployments
+ * - **Multiple Formats**: Supports PNG, JPG, WEBP, and other common formats
+ *
+ * ## Auto-Resize Feature:
+ *
+ * When enabled (default), the image is automatically resized in 5 steps from 100px
+ * to 1280px in the largest direction.
+ * This improves both accuracy and speed, especially for:
+ * - Large images with small QR codes
+ * - High-resolution photos
+ * - Images with multiple QR codes at different scales
+ *
+ * ## Example Request:
+ *
+ * ```
+ * {
+ * "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgA...",
+ * "auto_resize": true
+ * }
+ * ```
+ *
+ * ## Example Response:
+ *
+ * ```
+ * {
+ * "codes": [
+ * "https://example.com",
+ * "Hello, World!"
+ * ],
+ * "count": 2,
+ * "success": true
+ * }
+ * ```
+ */
+export const scanQrCodeApiV1QrScanPost = <ThrowOnError extends boolean = false>(
+  options: Options<ScanQrCodeApiV1QrScanPostData, ThrowOnError>,
+) => {
+  return (options.client ?? client).post<
+    ScanQrCodeApiV1QrScanPostResponses,
+    ScanQrCodeApiV1QrScanPostErrors,
+    ThrowOnError
+  >({
+    url: "/api/v1/qr/scan",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
   });
 };
 
@@ -174,6 +248,38 @@ export const rootGet = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     url: "/",
+    ...options,
+  });
+};
+
+/**
+ * Health Check
+ */
+export const healthCheckHealthGet = <ThrowOnError extends boolean = false>(
+  options?: Options<HealthCheckHealthGetData, ThrowOnError>,
+) => {
+  return (options?.client ?? client).get<
+    HealthCheckHealthGetResponses,
+    unknown,
+    ThrowOnError
+  >({
+    url: "/health",
+    ...options,
+  });
+};
+
+/**
+ * Health Check
+ */
+export const healthCheckHealthHead = <ThrowOnError extends boolean = false>(
+  options?: Options<HealthCheckHealthHeadData, ThrowOnError>,
+) => {
+  return (options?.client ?? client).head<
+    HealthCheckHealthHeadResponses,
+    unknown,
+    ThrowOnError
+  >({
+    url: "/health",
     ...options,
   });
 };
