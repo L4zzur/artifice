@@ -5,6 +5,6 @@ export const load = () => {
     meta: {
       title: siteConfig.meta.title,
       description: siteConfig.meta.description,
-    }
+    },
   };
 };
