@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException
 
 from schemas.error import ErrorResponse
 from schemas.qr_generator import QRCodeRequest, QRCodeResponse
-from services.exceptions import QRCodeError
+from services.exceptions import ServiceError
 from services.qr_generator_service import QRCodeGeneratorService
 
 router = APIRouter(prefix="/generate")
@@ -95,8 +95,8 @@ async def generate_qr_code(request: QRCodeRequest):
             image=result["image"], format=result["format"], size=result["size"]
         )
 
-    except QRCodeError as e:
-        logger.warning("QRCodeError: %s", e.message)
+    except ServiceError as e:
+        logger.warning("ServiceError: %s", e.message)
         raise HTTPException(
             status_code=e.status_code,
             detail={
