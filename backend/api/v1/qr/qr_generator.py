@@ -96,7 +96,7 @@ async def generate_qr_code(request: QRCodeRequest):
         )
 
     except ServiceError as e:
-        logger.warning("ServiceError: %s", e.message)
+        logger.warning("QR code generation error: %s", e.message)
         raise HTTPException(
             status_code=e.status_code,
             detail={

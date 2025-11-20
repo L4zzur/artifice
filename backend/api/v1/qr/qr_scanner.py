@@ -77,7 +77,7 @@ async def scan_qr_code(request: QRScanRequest):
         )
 
     except ServiceError as e:
-        logger.warning("ServiceError: %s", e.message)
+        logger.warning("QR code scanning error: %s", e.message)
         raise HTTPException(
             status_code=e.status_code,
             detail={
