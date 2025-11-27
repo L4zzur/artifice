@@ -41,7 +41,7 @@ wheels = [
 
 [[package]]
 name = "artifice-backend"
-version = "0.1.0"
+version = "0.1.1"
 source = { virtual = "." }
 dependencies = [
     { name = "fastapi" },
@@ -50,6 +50,7 @@ dependencies = [
     { name = "qrcode", extra = ["pil"] },
     { name = "qrlyzer" },
     { name = "uvicorn" },
+    { name = "zxcvbn" },
 ]
 
 [package.metadata]
@@ -60,6 +61,7 @@ requires-dist = [
     { name = "qrcode", extras = ["pil"], specifier = ">=8.2" },
     { name = "qrlyzer", specifier = ">=0.2.6" },
     { name = "uvicorn", specifier = ">=0.38.0" },
+    { name = "zxcvbn", specifier = ">=4.5.0" },
 ]
 
 [[package]]
@@ -361,4 +363,13 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/cb/ce/f06b84e2697fef4688ca63bdb2fdf113ca0a3be33f94488f2cadb690b0cf/uvicorn-0.38.0.tar.gz", hash = "sha256:fd97093bdd120a2609fc0d3afe931d4d4ad688b6e75f0f929fde1bc36fe0e91d", size = 80605, upload-time = "2025-10-18T13:46:44.63Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ee/d9/d88e73ca598f4f6ff671fb5fde8a32925c2e08a637303a1d12883c7305fa/uvicorn-0.38.0-py3-none-any.whl", hash = "sha256:48c0afd214ceb59340075b4a052ea1ee91c16fbc2a9b1469cca0e54566977b02", size = 68109, upload-time = "2025-10-18T13:46:42.958Z" },
+]
+
+[[package]]
+name = "zxcvbn"
+version = "4.5.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ae/40/9366940b1484fd4e9423c8decbbf34a73bf52badb36281e082fe02b57aca/zxcvbn-4.5.0.tar.gz", hash = "sha256:70392c0fff39459d7f55d0211151401e79e76fcc6e2c22b61add62900359c7c1", size = 411249, upload-time = "2025-02-19T19:03:02.699Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c2/16/7410f8e714a109d43d17f4e27c8eabb351557653a9b570db1bd7dfdfd822/zxcvbn-4.5.0-py2.py3-none-any.whl", hash = "sha256:2b6eed621612ce6d65e6e4c7455b966acee87d0280e257956b1f06ccc66bd5ff", size = 409397, upload-time = "2025-02-19T19:03:00.521Z" },
 ]

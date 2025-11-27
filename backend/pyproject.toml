@@ -11,4 +11,5 @@ dependencies = [
     "qrcode[pil]>=8.2",
     "qrlyzer>=0.2.6",
     "uvicorn>=0.38.0",
+    "zxcvbn>=4.5.0",
 ]
