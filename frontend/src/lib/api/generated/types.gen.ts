@@ -82,6 +82,36 @@ export type ColorMaskType =
   | "image";
 
 /**
+ * CrackTimes
+ */
+export type CrackTimes = {
+  /**
+   * Offline Fast Hashing
+   *
+   * Offline attack, fast hashing (10B/sec)
+   */
+  offline_fast_hashing: string;
+  /**
+   * Offline Slow Hashing
+   *
+   * Offline attack, slow hashing (10K/sec)
+   */
+  offline_slow_hashing: string;
+  /**
+   * Online No Throttling
+   *
+   * Online attack, no rate limiting (10/sec)
+   */
+  online_no_throttling: string;
+  /**
+   * Online Throttling
+   *
+   * Online attack, with rate limiting (100/hour)
+   */
+  online_throttling: string;
+};
+
+/**
  * ErrorCorrection
  */
 export type ErrorCorrection = "L" | "M" | "Q" | "H";
@@ -201,6 +231,152 @@ export type OutputFormat =
   | "svg-path"
   | "svg-fragment"
   | "ascii";
+
+/**
+ * PasswordAnalyzeRequest
+ */
+export type PasswordAnalyzeRequest = {
+  /**
+   * Password
+   *
+   * Password to analyze
+   */
+  password: string;
+};
+
+/**
+ * PasswordAnalyzeResponse
+ */
+export type PasswordAnalyzeResponse = {
+  /**
+   * Password strength analysis
+   */
+  info: PasswordStrengthInfo;
+};
+
+/**
+ * PasswordFeedback
+ */
+export type PasswordFeedback = {
+  /**
+   * Warning
+   *
+   * Warning about password weakness
+   */
+  warning?: string;
+  /**
+   * Suggestions
+   *
+   * Suggestions to improve password
+   */
+  suggestions?: Array<string>;
+};
+
+/**
+ * PasswordGenerateRequest
+ */
+export type PasswordGenerateRequest = {
+  /**
+   * Length
+   *
+   * Length of password to generate (4-128 characters)
+   */
+  length?: number;
+  /**
+   * Include Uppercase
+   *
+   * Include uppercase letters (A-Z)
+   */
+  include_uppercase?: boolean;
+  /**
+   * Include Lowercase
+   *
+   * Include lowercase letters (a-z)
+   */
+  include_lowercase?: boolean;
+  /**
+   * Include Numbers
+   *
+   * Include numbers (0-9)
+   */
+  include_numbers?: boolean;
+  /**
+   * Include Symbols
+   *
+   * Include symbols (!@#$%^&*()_+-=[]{}|;:,.<>?)
+   */
+  include_symbols?: boolean;
+  /**
+   * Include Similar
+   *
+   * Include similar characters (i, l, 1, L, o, 0, O)
+   */
+  include_similar?: boolean;
+};
+
+/**
+ * PasswordGenerateResponse
+ */
+export type PasswordGenerateResponse = {
+  /**
+   * Password
+   *
+   * Generated password
+   */
+  password: string;
+  /**
+   * Password strength analysis
+   */
+  strength: PasswordStrengthInfo;
+};
+
+/**
+ * PasswordStrength
+ */
+export type PasswordStrength =
+  | "very_weak"
+  | "weak"
+  | "fair"
+  | "strong"
+  | "very_strong";
+
+/**
+ * PasswordStrengthInfo
+ *
+ * Password strength analysis from zxcvbn
+ */
+export type PasswordStrengthInfo = {
+  /**
+   * Overall password strength (0-4)
+   */
+  strength: PasswordStrength;
+  /**
+   * Score
+   *
+   * Strength score from zxcvbn (0-4)
+   */
+  score: number;
+  /**
+   * Guesses
+   *
+   * Estimated guesses needed to crack
+   */
+  guesses: number;
+  /**
+   * Guesses Log10
+   *
+   * log10 of guesses
+   */
+  guesses_log10: number;
+  /**
+   * Time to crack in different scenarios
+   */
+  crack_times: CrackTimes;
+  /**
+   * Suggestions to improve password
+   */
+  feedback: PasswordFeedback;
+};
 
 /**
  * QRCodeRequest
@@ -484,6 +660,76 @@ export type ScanQrCodeApiV1QrScanPostResponses = {
 
 export type ScanQrCodeApiV1QrScanPostResponse =
   ScanQrCodeApiV1QrScanPostResponses[keyof ScanQrCodeApiV1QrScanPostResponses];
+
+export type GeneratePasswordApiV1PasswordGeneratePostData = {
+  body: PasswordGenerateRequest;
+  path?: never;
+  query?: never;
+  url: "/api/v1/password/generate";
+};
+
+export type GeneratePasswordApiV1PasswordGeneratePostErrors = {
+  /**
+   * Bad Request
+   */
+  400: ErrorResponse;
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type GeneratePasswordApiV1PasswordGeneratePostError =
+  GeneratePasswordApiV1PasswordGeneratePostErrors[keyof GeneratePasswordApiV1PasswordGeneratePostErrors];
+
+export type GeneratePasswordApiV1PasswordGeneratePostResponses = {
+  /**
+   * Successful Response
+   */
+  200: PasswordGenerateResponse;
+};
+
+export type GeneratePasswordApiV1PasswordGeneratePostResponse =
+  GeneratePasswordApiV1PasswordGeneratePostResponses[keyof GeneratePasswordApiV1PasswordGeneratePostResponses];
+
+export type AnalyzePasswordApiV1PasswordAnalyzePostData = {
+  body: PasswordAnalyzeRequest;
+  path?: never;
+  query?: never;
+  url: "/api/v1/password/analyze";
+};
+
+export type AnalyzePasswordApiV1PasswordAnalyzePostErrors = {
+  /**
+   * Bad Request
+   */
+  400: ErrorResponse;
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type AnalyzePasswordApiV1PasswordAnalyzePostError =
+  AnalyzePasswordApiV1PasswordAnalyzePostErrors[keyof AnalyzePasswordApiV1PasswordAnalyzePostErrors];
+
+export type AnalyzePasswordApiV1PasswordAnalyzePostResponses = {
+  /**
+   * Successful Response
+   */
+  200: PasswordAnalyzeResponse;
+};
+
+export type AnalyzePasswordApiV1PasswordAnalyzePostResponse =
+  AnalyzePasswordApiV1PasswordAnalyzePostResponses[keyof AnalyzePasswordApiV1PasswordAnalyzePostResponses];
 
 export type RootGetData = {
   body?: never;
