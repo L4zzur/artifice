@@ -66,3 +66,15 @@ class HashFileResponse(BaseModel):
     algorithm: HashAlgorithm = Field(..., description="Hash algorithm")
     format: OutputFormat = Field(..., description="Output format")
     file_size: int = Field(..., description="Original file size in bytes")
+
+
+class HashAlgorithmSchema(BaseModel):
+    name: str = Field(..., description="Hash algorithm name")
+    output_bits: int = Field(..., description="Output length in bits")
+    output_hex_length: int = Field(..., description="Output length in hex characters")
+    output_base64_length: int = Field(
+        ..., description="Output length in base64 characters"
+    )
+    security: str = Field(..., description="Security level")
+    description: str = Field(..., description="Hash algorithm description")
+    recommended: bool = Field(..., description="Whether the algorithm is recommended")
