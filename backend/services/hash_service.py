@@ -1,4 +1,5 @@
 import base64
+import binascii
 import hashlib
 import hmac
 
@@ -47,3 +48,38 @@ class HashService:
                 message=f"Unsupported algorithm: {algorithm}",
                 status_code=400,
             )
+
+    @staticmethod
+    def _detect_format(hash_str: str) -> OutputFormat:
+        if all(c in "0123456789abcdefABCDEF" for c in hash_str):
+            return OutputFormat.hex
+        try:
+            base64.b64decode(hash_str, validate=True)
+            return OutputFormat.base64
+        except (ValueError, binascii.Error):
+            raise ServiceError(
+                code="invalid_hash_format",
+                message="Cannot detect hash format",
+                status_code=400,
+            )
+
+    @staticmethod
+    def verify_hash(
+        data: str,
+        expected_hash: str,
+        algorithm: str,
+        output_format: str | None,
+        hmac_key: str | None,
+    ) -> dict:
+        if not output_format:
+            output_format = HashService._detect_format(expected_hash)
+
+        generated_hash = HashService.generate_hash(
+            data, algorithm, output_format, hmac_key
+        )
+        is_valid = hmac.compare_digest(generated_hash["hash"], expected_hash)
+
+        return {
+            "valid": is_valid,
+            "algorithm": algorithm,
+        }
