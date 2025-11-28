@@ -19,13 +19,14 @@
       title: "QR Code Tools",
       description: "Generate and scan QR codes with ease",
       href: "/qr",
+      comingSoon: false,
     },
     {
       icon: Shield,
       title: "Password Tools",
       description: "Generate strong and secure passwords",
       href: "/password",
-      comingSoon: true,
+      comingSoon: false,
     },
     {
       icon: Zap,
