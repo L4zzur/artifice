@@ -34,3 +34,18 @@ class HashGenerateResponse(BaseModel):
     hash: str
     algorithm: HashAlgorithm
     format: OutputFormat
+
+
+class HashVerifyRequest(BaseModel):
+    data: str = Field(..., description="Data to be verified")
+    expected_hash: str = Field(..., description="Expected hash")
+    algorithm: HashAlgorithm = Field(..., description="Hash algorithm")
+    hmac_key: str | None = Field(default=None, description="HMAC key (optional)")
+    output_format: OutputFormat | None = Field(
+        default=None, description="Output format (auto-detect if not specified)"
+    )
+
+
+class HashVerifyResponse(BaseModel):
+    valid: bool = Field(..., description="Whether the hash is valid")
+    algorithm: HashAlgorithm
