@@ -48,4 +48,21 @@ class HashVerifyRequest(BaseModel):
 
 class HashVerifyResponse(BaseModel):
     valid: bool = Field(..., description="Whether the hash is valid")
-    algorithm: HashAlgorithm
+    algorithm: HashAlgorithm = Field(..., description="Hash algorithm")
+
+
+class HashFileRequest(BaseModel):
+    file_base64: str = Field(..., description="Base64 encoded file data")
+    algorithm: HashAlgorithm = Field(
+        default=HashAlgorithm.sha256, description="Hash algorithm"
+    )
+    output_format: OutputFormat = Field(
+        default=OutputFormat.hex, description="Output format"
+    )
+
+
+class HashFileResponse(BaseModel):
+    hash: str = Field(..., description="Hash value")
+    algorithm: HashAlgorithm = Field(..., description="Hash algorithm")
+    format: OutputFormat = Field(..., description="Output format")
+    file_size: int = Field(..., description="Original file size in bytes")
