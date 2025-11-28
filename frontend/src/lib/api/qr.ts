@@ -38,7 +38,7 @@ export type {
  * Generate QR code with comprehensive styling options
  *
  * @param params - QR code generation parameters
- * @returns Promise<QRCodeResponse> - Generated QR code data
+ * @returns Generated QR code data
  * @throws Error if generation fails
  */
 export async function generateQRCode(
@@ -67,7 +67,7 @@ export async function generateQRCode(
  * Scan and decode QR code(s) from an image
  *
  * @param params - Scan request parameters (image base64, auto_resize)
- * @returns Promise<QRScanResponse> - Decoded QR codes
+ * @returns Decoded QR codes
  * @throws Error if scan fails or no QR codes found
  *
  * @example

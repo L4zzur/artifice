@@ -15,7 +15,7 @@ import type {
  * Generate password with strength analysis
  *
  * @param params - Password generation parameters
- * @returns Promise<PasswordGenerateResponse> - Generated password data
+ * @returns Generated password data
  * @throws Error if generation fails
  */
 export async function generatePassword(
@@ -44,7 +44,7 @@ export async function generatePassword(
  * Analyze password strength
  *
  * @param params - Password analysis parameters
- * @returns Promise<PasswordAnalyzeResponse> - Analyzed password data
+ * @returns Analyzed password data
  * @throws Error if analysis fails
  */
 export async function analyzePassword(
