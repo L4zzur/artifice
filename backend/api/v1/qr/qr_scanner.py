@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException
 
 from schemas.error import ErrorResponse
 from schemas.qr_scanner import QRScanRequest, QRScanResponse
-from services.exceptions import QRCodeError
+from services.exceptions import ServiceError
 from services.qr_scanner_service import QRCodeScannerService
 
 router = APIRouter(prefix="/scan")
@@ -76,8 +76,8 @@ async def scan_qr_code(request: QRScanRequest):
             success=result["success"],
         )
 
-    except QRCodeError as e:
-        logger.warning("QRCodeError: %s", e.message)
+    except ServiceError as e:
+        logger.warning("QR code scanning error: %s", e.message)
         raise HTTPException(
             status_code=e.status_code,
             detail={

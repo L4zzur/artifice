@@ -1,7 +1,7 @@
 from typing import Any
 
 
-class QRCodeError(Exception):
+class ServiceError(Exception):
     def __init__(
         self,
         code: str,

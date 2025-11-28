@@ -6,7 +6,7 @@ from pathlib import Path
 import qrlyzer
 from PIL import Image, UnidentifiedImageError
 
-from .exceptions import QRCodeError
+from .exceptions import ServiceError
 
 logger = getLogger(__name__)
 
@@ -32,7 +32,7 @@ class QRCodeScannerService:
             dict with decoded QR codes and metadata
 
         Raises:
-            QRCodeError: If image is invalid or no QR codes found
+            ServiceError: If image is invalid or no QR codes found
         """
         try:
             image_bytes = base64.b64decode(
@@ -40,7 +40,7 @@ class QRCodeScannerService:
             )
             image = Image.open(io.BytesIO(image_bytes))
         except UnidentifiedImageError as exc:
-            raise QRCodeError(
+            raise ServiceError(
                 code="invalid_image",
                 message="Invalid image data provided",
                 status_code=400,
@@ -49,7 +49,7 @@ class QRCodeScannerService:
         try:
             image_gray = image.convert("L")
         except Exception as exc:
-            raise QRCodeError(
+            raise ServiceError(
                 code="image_processing_failed",
                 message="Failed to process image",
                 status_code=400,
@@ -64,7 +64,7 @@ class QRCodeScannerService:
             )
 
             if not codes or len(codes) == 0:
-                raise QRCodeError(
+                raise ServiceError(
                     code="no_qr_code_found",
                     message="No QR codes found in image",
                     status_code=404,
@@ -78,11 +78,11 @@ class QRCodeScannerService:
                 "success": True,
             }
 
-        except QRCodeError:
+        except ServiceError:
             raise
         except Exception as exc:
             logger.exception("Error during QR code detection/decoding with qrlyzer")
-            raise QRCodeError(
+            raise ServiceError(
                 code="scan_failed",
                 message="Failed to scan QR code from image",
                 status_code=500,

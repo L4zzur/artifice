@@ -3,6 +3,12 @@
 import type { Client, Options as Options2, TDataShape } from "./client";
 import { client } from "./client.gen";
 import type {
+  AnalyzePasswordApiV1PasswordAnalyzePostData,
+  AnalyzePasswordApiV1PasswordAnalyzePostErrors,
+  AnalyzePasswordApiV1PasswordAnalyzePostResponses,
+  GeneratePasswordApiV1PasswordGeneratePostData,
+  GeneratePasswordApiV1PasswordGeneratePostErrors,
+  GeneratePasswordApiV1PasswordGeneratePostResponses,
   GenerateQrCodeApiV1QrGeneratePostData,
   GenerateQrCodeApiV1QrGeneratePostErrors,
   GenerateQrCodeApiV1QrGeneratePostResponses,
@@ -228,6 +234,94 @@ export const scanQrCodeApiV1QrScanPost = <ThrowOnError extends boolean = false>(
     ThrowOnError
   >({
     url: "/api/v1/qr/scan",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });
+};
+
+/**
+ * Generate Password
+ *
+ * Generate secure password with realistic strength analysis
+ *
+ * Uses the industry-standard zxcvbn (Dropbox) library to provide realistic password
+ * strength estimates that account for:
+ *
+ * - **Dictionary attacks**: Common words, names, places
+ * - **Keyboard patterns**: qwerty, asdfgh, etc.
+ * - **l33t speak**: P@ssw0rd, h4ck3r, etc.
+ * - **Repeating characters**: aaaa, 1111, etc.
+ * - **Sequences**: abcd, 1234, etc.
+ * - **Common passwords**: password123, admin, etc.
+ *
+ * ## Strength Scoring (0-4)
+ *
+ * - **0 (Very Weak)**: Cracked instantly
+ * - **1 (Weak)**: Cracked in seconds to minutes
+ * - **2 (Fair)**: Cracked in hours to days
+ * - **3 (Strong)**: Cracked in months to years
+ * - **4 (Very Strong)**: Cracked in centuries or never
+ *
+ * ## Example Response:
+ *
+ * ```
+ * {
+ * "password": "aB3!dF7&hK9@mN2$",
+ * "strength": {
+ * "strength": "very_strong",
+ * "score": 4,
+ * "guesses": 1000000000000,
+ * "guesses_log10": 12.0,
+ * "crack_times": {
+ * "offline_fast_hashing": "3 months",
+ * "offline_slow_hashing": "centuries",
+ * "online_no_throttling": "centuries",
+ * "online_throttling": "centuries"
+ * },
+ * "feedback": {
+ * "warning": "",
+ * "suggestions": []
+ * }
+ * }
+ * }
+ * ```
+ */
+export const generatePasswordApiV1PasswordGeneratePost = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GeneratePasswordApiV1PasswordGeneratePostData, ThrowOnError>,
+) => {
+  return (options.client ?? client).post<
+    GeneratePasswordApiV1PasswordGeneratePostResponses,
+    GeneratePasswordApiV1PasswordGeneratePostErrors,
+    ThrowOnError
+  >({
+    url: "/api/v1/password/generate",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });
+};
+
+/**
+ * Analyze Password
+ */
+export const analyzePasswordApiV1PasswordAnalyzePost = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<AnalyzePasswordApiV1PasswordAnalyzePostData, ThrowOnError>,
+) => {
+  return (options.client ?? client).post<
+    AnalyzePasswordApiV1PasswordAnalyzePostResponses,
+    AnalyzePasswordApiV1PasswordAnalyzePostErrors,
+    ThrowOnError
+  >({
+    url: "/api/v1/password/analyze",
     ...options,
     headers: {
       "Content-Type": "application/json",

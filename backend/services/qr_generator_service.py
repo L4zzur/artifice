@@ -39,7 +39,7 @@ from schemas.qr_generator import (
     ModuleDrawerConfig,
 )
 
-from .exceptions import QRCodeError
+from .exceptions import ServiceError
 
 logger = getLogger(__name__)
 
@@ -181,7 +181,7 @@ class QRCodeGeneratorService:
             cls._ensure_temp_dir()
 
             if back_color == (0, 0, 0):
-                raise QRCodeError(
+                raise ServiceError(
                     code="invalid_color_combination",
                     message="Pure black background (#000000) cannot be used with "
                     "Image Pattern mode. Use a lighter color.",
@@ -195,7 +195,7 @@ class QRCodeGeneratorService:
                 )
                 image = Image.open(io.BytesIO(image_bytes))
             except (binascii.Error, UnidentifiedImageError) as exc:
-                raise QRCodeError(
+                raise ServiceError(
                     code="invalid_color_mask_image",
                     message="Invalid color_mask_image data",
                     status_code=400,
@@ -223,14 +223,14 @@ class QRCodeGeneratorService:
         embedded_image: str | None,
     ) -> dict:
         if not use_styled_image and (module_drawer or eye_drawer or color_mask):
-            raise QRCodeError(
+            raise ServiceError(
                 code="styled_image_required",
                 message="Styled image options require use_styled_image=True",
                 status_code=400,
             )
 
         if output_format != "png" and final_size is not None:
-            raise QRCodeError(
+            raise ServiceError(
                 code="final_size_png_only",
                 message="final_size is only supported for PNG output",
                 status_code=400,
@@ -298,7 +298,7 @@ class QRCodeGeneratorService:
                     )
                     image = Image.open(io.BytesIO(image_bytes))
                 except (binascii.Error, UnidentifiedImageError) as exc:
-                    raise QRCodeError(
+                    raise ServiceError(
                         code="invalid_embedded_image",
                         message="Invalid embedded_image data",
                         status_code=400,

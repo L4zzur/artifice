@@ -7,6 +7,9 @@
     ChevronRight,
     CirclePlus,
     Scan,
+    KeyRound,
+    ShieldPlus,
+    ShieldCheck,
   } from "lucide-svelte";
 
   interface MenuItem {
@@ -35,6 +38,15 @@
       children: [
         { name: "Generator", path: "generate", icon: CirclePlus },
         { name: "Scanner", path: "scan", icon: Scan },
+      ],
+    },
+    {
+      name: "Password",
+      icon: KeyRound,
+      href: "/password",
+      children: [
+        { name: "Generator", path: "generate", icon: ShieldPlus },
+        { name: "Analyzer", path: "analyze", icon: ShieldCheck },
       ],
     },
   ];

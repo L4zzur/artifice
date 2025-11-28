@@ -197,6 +197,129 @@
         }
       }
     },
+    "/api/v1/password/generate": {
+      "post": {
+        "tags": [
+          "Password Operations"
+        ],
+        "summary": "Generate Password",
+        "description": "Generate secure password with realistic strength analysis\n\nUses the industry-standard zxcvbn (Dropbox) library to provide realistic password\nstrength estimates that account for:\n\n- **Dictionary attacks**: Common words, names, places\n- **Keyboard patterns**: qwerty, asdfgh, etc.\n- **l33t speak**: P@ssw0rd, h4ck3r, etc.\n- **Repeating characters**: aaaa, 1111, etc.\n- **Sequences**: abcd, 1234, etc.\n- **Common passwords**: password123, admin, etc.\n\n## Strength Scoring (0-4)\n\n- **0 (Very Weak)**: Cracked instantly\n- **1 (Weak)**: Cracked in seconds to minutes\n- **2 (Fair)**: Cracked in hours to days\n- **3 (Strong)**: Cracked in months to years\n- **4 (Very Strong)**: Cracked in centuries or never\n\n## Example Response:\n\n```\n{\n    \"password\": \"aB3!dF7&hK9@mN2$\",\n    \"strength\": {\n        \"strength\": \"very_strong\",\n        \"score\": 4,\n        \"guesses\": 1000000000000,\n        \"guesses_log10\": 12.0,\n        \"crack_times\": {\n            \"offline_fast_hashing\": \"3 months\",\n            \"offline_slow_hashing\": \"centuries\",\n            \"online_no_throttling\": \"centuries\",\n            \"online_throttling\": \"centuries\"\n        },\n        \"feedback\": {\n            \"warning\": \"\",\n            \"suggestions\": []\n        }\n    }\n}\n```",
+        "operationId": "generate_password_api_v1_password_generate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordGenerateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PasswordGenerateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/password/analyze": {
+      "post": {
+        "tags": [
+          "Password Operations"
+        ],
+        "summary": "Analyze Password",
+        "operationId": "analyze_password_api_v1_password_analyze_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordAnalyzeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PasswordAnalyzeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/": {
       "get": {
         "summary": "Root",
@@ -386,6 +509,38 @@
         ],
         "title": "ColorMaskType"
       },
+      "CrackTimes": {
+        "properties": {
+          "offline_fast_hashing": {
+            "type": "string",
+            "title": "Offline Fast Hashing",
+            "description": "Offline attack, fast hashing (10B/sec)"
+          },
+          "offline_slow_hashing": {
+            "type": "string",
+            "title": "Offline Slow Hashing",
+            "description": "Offline attack, slow hashing (10K/sec)"
+          },
+          "online_no_throttling": {
+            "type": "string",
+            "title": "Online No Throttling",
+            "description": "Online attack, no rate limiting (10/sec)"
+          },
+          "online_throttling": {
+            "type": "string",
+            "title": "Online Throttling",
+            "description": "Online attack, with rate limiting (100/hour)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "offline_fast_hashing",
+          "offline_slow_hashing",
+          "online_no_throttling",
+          "online_throttling"
+        ],
+        "title": "CrackTimes"
+      },
       "ErrorCorrection": {
         "type": "string",
         "enum": [
@@ -549,6 +704,172 @@
           "ascii"
         ],
         "title": "OutputFormat"
+      },
+      "PasswordAnalyzeRequest": {
+        "properties": {
+          "password": {
+            "type": "string",
+            "maxLength": 128,
+            "title": "Password",
+            "description": "Password to analyze"
+          }
+        },
+        "type": "object",
+        "required": [
+          "password"
+        ],
+        "title": "PasswordAnalyzeRequest"
+      },
+      "PasswordAnalyzeResponse": {
+        "properties": {
+          "info": {
+            "$ref": "#/components/schemas/PasswordStrengthInfo",
+            "description": "Password strength analysis"
+          }
+        },
+        "type": "object",
+        "required": [
+          "info"
+        ],
+        "title": "PasswordAnalyzeResponse"
+      },
+      "PasswordFeedback": {
+        "properties": {
+          "warning": {
+            "type": "string",
+            "title": "Warning",
+            "description": "Warning about password weakness",
+            "default": ""
+          },
+          "suggestions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Suggestions",
+            "description": "Suggestions to improve password"
+          }
+        },
+        "type": "object",
+        "title": "PasswordFeedback"
+      },
+      "PasswordGenerateRequest": {
+        "properties": {
+          "length": {
+            "type": "integer",
+            "maximum": 128.0,
+            "minimum": 4.0,
+            "title": "Length",
+            "description": "Length of password to generate (4-128 characters)",
+            "default": 16
+          },
+          "include_uppercase": {
+            "type": "boolean",
+            "title": "Include Uppercase",
+            "description": "Include uppercase letters (A-Z)",
+            "default": true
+          },
+          "include_lowercase": {
+            "type": "boolean",
+            "title": "Include Lowercase",
+            "description": "Include lowercase letters (a-z)",
+            "default": true
+          },
+          "include_numbers": {
+            "type": "boolean",
+            "title": "Include Numbers",
+            "description": "Include numbers (0-9)",
+            "default": true
+          },
+          "include_symbols": {
+            "type": "boolean",
+            "title": "Include Symbols",
+            "description": "Include symbols (!@#$%^&*()_+-=[]{}|;:,.<>?)",
+            "default": true
+          },
+          "include_similar": {
+            "type": "boolean",
+            "title": "Include Similar",
+            "description": "Include similar characters (i, l, 1, L, o, 0, O)",
+            "default": false
+          }
+        },
+        "type": "object",
+        "title": "PasswordGenerateRequest"
+      },
+      "PasswordGenerateResponse": {
+        "properties": {
+          "password": {
+            "type": "string",
+            "title": "Password",
+            "description": "Generated password"
+          },
+          "strength": {
+            "$ref": "#/components/schemas/PasswordStrengthInfo",
+            "description": "Password strength analysis"
+          }
+        },
+        "type": "object",
+        "required": [
+          "password",
+          "strength"
+        ],
+        "title": "PasswordGenerateResponse"
+      },
+      "PasswordStrength": {
+        "type": "string",
+        "enum": [
+          "very_weak",
+          "weak",
+          "fair",
+          "strong",
+          "very_strong"
+        ],
+        "title": "PasswordStrength"
+      },
+      "PasswordStrengthInfo": {
+        "properties": {
+          "strength": {
+            "$ref": "#/components/schemas/PasswordStrength",
+            "description": "Overall password strength (0-4)"
+          },
+          "score": {
+            "type": "integer",
+            "maximum": 4.0,
+            "minimum": 0.0,
+            "title": "Score",
+            "description": "Strength score from zxcvbn (0-4)"
+          },
+          "guesses": {
+            "type": "integer",
+            "title": "Guesses",
+            "description": "Estimated guesses needed to crack"
+          },
+          "guesses_log10": {
+            "type": "number",
+            "title": "Guesses Log10",
+            "description": "log10 of guesses"
+          },
+          "crack_times": {
+            "$ref": "#/components/schemas/CrackTimes",
+            "description": "Time to crack in different scenarios"
+          },
+          "feedback": {
+            "$ref": "#/components/schemas/PasswordFeedback",
+            "description": "Suggestions to improve password"
+          }
+        },
+        "type": "object",
+        "required": [
+          "strength",
+          "score",
+          "guesses",
+          "guesses_log10",
+          "crack_times",
+          "feedback"
+        ],
+        "title": "PasswordStrengthInfo",
+        "description": "Password strength analysis from zxcvbn"
       },
       "QRCodeRequest": {
         "properties": {
