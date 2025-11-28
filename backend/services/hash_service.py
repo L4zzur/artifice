@@ -83,3 +83,42 @@ class HashService:
             "valid": is_valid,
             "algorithm": algorithm,
         }
+
+    @staticmethod
+    def hash_file(file_base64: str, algorithm: str, output_format: str) -> dict:
+        try:
+            file_base64 = (
+                file_base64.split(",")[1] if "," in file_base64 else file_base64
+            )
+            file_bytes = base64.b64decode(file_base64, validate=True)
+        except Exception as e:
+            raise ServiceError(
+                code="invalid_file_base64",
+                message="Invalid base64 encoded file data provided",
+                status_code=400,
+                context={"error": str(e)},
+            )
+
+        try:
+            hash_obj = hashlib.new(algorithm)
+        except ValueError:
+            raise ServiceError(
+                code="unknown_algorithm",
+                message=f"Unknown hash algorithm: {algorithm}",
+                status_code=400,
+            )
+
+        hash_obj.update(file_bytes)
+        digest = hash_obj.digest()
+
+        if output_format == OutputFormat.base64:
+            hash_value = base64.b64encode(digest).decode()
+        else:
+            hash_value = digest.hex()
+
+        return {
+            "hash": hash_value,
+            "algorithm": algorithm,
+            "format": output_format,
+            "file_size": len(file_bytes),
+        }
