@@ -6,16 +6,24 @@ import type {
   AnalyzePasswordApiV1PasswordAnalyzePostData,
   AnalyzePasswordApiV1PasswordAnalyzePostErrors,
   AnalyzePasswordApiV1PasswordAnalyzePostResponses,
+  GenerateHashApiV1HashGeneratePostData,
+  GenerateHashApiV1HashGeneratePostErrors,
+  GenerateHashApiV1HashGeneratePostResponses,
   GeneratePasswordApiV1PasswordGeneratePostData,
   GeneratePasswordApiV1PasswordGeneratePostErrors,
   GeneratePasswordApiV1PasswordGeneratePostResponses,
   GenerateQrCodeApiV1QrGeneratePostData,
   GenerateQrCodeApiV1QrGeneratePostErrors,
   GenerateQrCodeApiV1QrGeneratePostResponses,
+  HashFileApiV1HashFilePostData,
+  HashFileApiV1HashFilePostErrors,
+  HashFileApiV1HashFilePostResponses,
   HealthCheckHealthGetData,
   HealthCheckHealthGetResponses,
   HealthCheckHealthHeadData,
   HealthCheckHealthHeadResponses,
+  ListAlgorithmsApiV1HashAlgorithmsGetData,
+  ListAlgorithmsApiV1HashAlgorithmsGetResponses,
   ListColorMasksApiV1QrGenerateColorMasksGetData,
   ListColorMasksApiV1QrGenerateColorMasksGetResponses,
   ListErrorCorrectionApiV1QrGenerateErrorCorrectionLevelsGetData,
@@ -27,6 +35,9 @@ import type {
   ScanQrCodeApiV1QrScanPostData,
   ScanQrCodeApiV1QrScanPostErrors,
   ScanQrCodeApiV1QrScanPostResponses,
+  VerifyHashApiV1HashVerifyPostData,
+  VerifyHashApiV1HashVerifyPostErrors,
+  VerifyHashApiV1HashVerifyPostResponses,
 } from "./types.gen";
 
 export type Options<
@@ -322,6 +333,176 @@ export const analyzePasswordApiV1PasswordAnalyzePost = <
     ThrowOnError
   >({
     url: "/api/v1/password/analyze",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });
+};
+
+/**
+ * Generate Hash
+ *
+ * Generate cryptographic hash
+ *
+ * ## Supported Algorithms:
+ * - **MD5**: 128-bit (legacy, use for checksums only)
+ * - **SHA-1**: 160-bit (deprecated for security)
+ * - **SHA-256**: 256-bit (recommended)
+ * - **SHA-512**: 512-bit (high security)
+ * - **SHA3-256/512**: SHA-3 family
+ * - **BLAKE2b/s**: Fast and secure
+ *
+ * ## HMAC Support:
+ * Provide `hmac_key` for keyed-hash message authentication
+ *
+ * ## Example Request:
+ * ```
+ * {
+ * "data": "Hello, World!",
+ * "algorithm": "sha256",
+ * "output_format": "hex"
+ * }
+ * ```
+ *
+ * ## Example Response:
+ * ```
+ * {
+ * "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+ * "algorithm": "sha256",
+ * "format": "hex"
+ * }
+ * ```
+ */
+export const generateHashApiV1HashGeneratePost = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GenerateHashApiV1HashGeneratePostData, ThrowOnError>,
+) => {
+  return (options.client ?? client).post<
+    GenerateHashApiV1HashGeneratePostResponses,
+    GenerateHashApiV1HashGeneratePostErrors,
+    ThrowOnError
+  >({
+    url: "/api/v1/hash/generate",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });
+};
+
+/**
+ * Verify Hash
+ *
+ * Verify cryptographic hash
+ *
+ * ## Auto-Detection:
+ * Hash format (hex/base64) is automatically detected if not specified
+ *
+ * ## Example Request:
+ * ```
+ * {
+ * "data": "Hello, World!",
+ * "expected_hash": "dffd6021bb2bd5b0...",
+ * "algorithm": "sha256"
+ * }
+ * ```
+ *
+ * ## Example Response:
+ * ```
+ * {
+ * "valid": true,
+ * "algorithm": "sha256"
+ * }
+ * ```
+ */
+export const verifyHashApiV1HashVerifyPost = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<VerifyHashApiV1HashVerifyPostData, ThrowOnError>,
+) => {
+  return (options.client ?? client).post<
+    VerifyHashApiV1HashVerifyPostResponses,
+    VerifyHashApiV1HashVerifyPostErrors,
+    ThrowOnError
+  >({
+    url: "/api/v1/hash/verify",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
+  });
+};
+
+/**
+ * List Algorithms
+ *
+ * List all supported hash algorithms with details
+ *
+ * Returns information about output length, security level,
+ * and recommended use cases for each algorithm.
+ */
+export const listAlgorithmsApiV1HashAlgorithmsGet = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<ListAlgorithmsApiV1HashAlgorithmsGetData, ThrowOnError>,
+) => {
+  return (options?.client ?? client).get<
+    ListAlgorithmsApiV1HashAlgorithmsGetResponses,
+    unknown,
+    ThrowOnError
+  >({
+    url: "/api/v1/hash/algorithms",
+    ...options,
+  });
+};
+
+/**
+ * Hash File
+ *
+ * Calculate cryptographic hash of a file
+ *
+ * ## Use Cases:
+ * - **File Integrity**: Verify file hasn't been modified
+ * - **Duplicate Detection**: Compare files by hash
+ * - **Checksums**: Validate downloads
+ *
+ * ## File Size Limits:
+ * - Maximum ~50MB (base64 encoded string size limits)
+ * - For larger files, use streaming or chunked uploads
+ *
+ * ## Example Request:
+ * ```
+ * {
+ * "file_base64": "data:image/png;base64,iVBORw0KGgoAAAANSUh...",
+ * "algorithm": "sha256",
+ * "output_format": "hex"
+ * }
+ * ```
+ *
+ * ## Example Response:
+ * ```
+ * {
+ * "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+ * "algorithm": "sha256",
+ * "format": "hex",
+ * "file_size": 2048
+ * }
+ * ```
+ */
+export const hashFileApiV1HashFilePost = <ThrowOnError extends boolean = false>(
+  options: Options<HashFileApiV1HashFilePostData, ThrowOnError>,
+) => {
+  return (options.client ?? client).post<
+    HashFileApiV1HashFilePostResponses,
+    HashFileApiV1HashFilePostErrors,
+    ThrowOnError
+  >({
+    url: "/api/v1/hash/file",
     ...options,
     headers: {
       "Content-Type": "application/json",

@@ -320,6 +320,218 @@
         }
       }
     },
+    "/api/v1/hash/generate": {
+      "post": {
+        "tags": [
+          "Hash Operations"
+        ],
+        "summary": "Generate Hash",
+        "description": "Generate cryptographic hash\n\n## Supported Algorithms:\n- **MD5**: 128-bit (legacy, use for checksums only)\n- **SHA-1**: 160-bit (deprecated for security)\n- **SHA-256**: 256-bit (recommended)\n- **SHA-512**: 512-bit (high security)\n- **SHA3-256/512**: SHA-3 family\n- **BLAKE2b/s**: Fast and secure\n\n## HMAC Support:\nProvide `hmac_key` for keyed-hash message authentication\n\n## Example Request:\n```\n{\n    \"data\": \"Hello, World!\",\n    \"algorithm\": \"sha256\",\n    \"output_format\": \"hex\"\n}\n```\n\n## Example Response:\n```\n{\n    \"hash\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\n    \"algorithm\": \"sha256\",\n    \"format\": \"hex\"\n}\n```",
+        "operationId": "generate_hash_api_v1_hash_generate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HashGenerateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HashGenerateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hash/verify": {
+      "post": {
+        "tags": [
+          "Hash Operations"
+        ],
+        "summary": "Verify Hash",
+        "description": "Verify cryptographic hash\n\n## Auto-Detection:\nHash format (hex/base64) is automatically detected if not specified\n\n## Example Request:\n```\n{\n    \"data\": \"Hello, World!\",\n    \"expected_hash\": \"dffd6021bb2bd5b0...\",\n    \"algorithm\": \"sha256\"\n}\n```\n\n## Example Response:\n```\n{\n    \"valid\": true,\n    \"algorithm\": \"sha256\"\n}\n```",
+        "operationId": "verify_hash_api_v1_hash_verify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HashVerifyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HashVerifyResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hash/algorithms": {
+      "get": {
+        "tags": [
+          "Hash Operations"
+        ],
+        "summary": "List Algorithms",
+        "description": "List all supported hash algorithms with details\n\nReturns information about output length, security level,\nand recommended use cases for each algorithm.",
+        "operationId": "list_algorithms_api_v1_hash_algorithms_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/HashAlgorithmSchema"
+                  },
+                  "type": "array",
+                  "title": "Response List Algorithms Api V1 Hash Algorithms Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hash/file": {
+      "post": {
+        "tags": [
+          "Hash Operations"
+        ],
+        "summary": "Hash File",
+        "description": "Calculate cryptographic hash of a file\n\n## Use Cases:\n- **File Integrity**: Verify file hasn't been modified\n- **Duplicate Detection**: Compare files by hash\n- **Checksums**: Validate downloads\n\n## File Size Limits:\n- Maximum ~50MB (base64 encoded string size limits)\n- For larger files, use streaming or chunked uploads\n\n## Example Request:\n```\n{\n    \"file_base64\": \"data:image/png;base64,iVBORw0KGgoAAAANSUh...\",\n    \"algorithm\": \"sha256\",\n    \"output_format\": \"hex\"\n}\n```\n\n## Example Response:\n```\n{\n    \"hash\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\",\n    \"algorithm\": \"sha256\",\n    \"format\": \"hex\",\n    \"file_size\": 2048\n}\n```",
+        "operationId": "hash_file_api_v1_hash_file_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HashFileRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HashFileResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/": {
       "get": {
         "summary": "Root",
@@ -644,6 +856,248 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
+      "HashAlgorithm": {
+        "type": "string",
+        "enum": [
+          "md5",
+          "sha1",
+          "sha256",
+          "sha512",
+          "sha3_256",
+          "sha3_512",
+          "blake2b",
+          "blake2s"
+        ],
+        "title": "HashAlgorithm"
+      },
+      "HashAlgorithmSchema": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "Hash algorithm name"
+          },
+          "output_bits": {
+            "type": "integer",
+            "title": "Output Bits",
+            "description": "Output length in bits"
+          },
+          "output_hex_length": {
+            "type": "integer",
+            "title": "Output Hex Length",
+            "description": "Output length in hex characters"
+          },
+          "output_base64_length": {
+            "type": "integer",
+            "title": "Output Base64 Length",
+            "description": "Output length in base64 characters"
+          },
+          "security": {
+            "type": "string",
+            "title": "Security",
+            "description": "Security level"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description",
+            "description": "Hash algorithm description"
+          },
+          "recommended": {
+            "type": "boolean",
+            "title": "Recommended",
+            "description": "Whether the algorithm is recommended"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "output_bits",
+          "output_hex_length",
+          "output_base64_length",
+          "security",
+          "description",
+          "recommended"
+        ],
+        "title": "HashAlgorithmSchema"
+      },
+      "HashFileRequest": {
+        "properties": {
+          "file_base64": {
+            "type": "string",
+            "title": "File Base64",
+            "description": "Base64 encoded file data"
+          },
+          "algorithm": {
+            "$ref": "#/components/schemas/HashAlgorithm",
+            "description": "Hash algorithm",
+            "default": "sha256"
+          },
+          "output_format": {
+            "$ref": "#/components/schemas/schemas__hash__OutputFormat",
+            "description": "Output format",
+            "default": "hex"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file_base64"
+        ],
+        "title": "HashFileRequest"
+      },
+      "HashFileResponse": {
+        "properties": {
+          "hash": {
+            "type": "string",
+            "title": "Hash",
+            "description": "Hash value"
+          },
+          "algorithm": {
+            "$ref": "#/components/schemas/HashAlgorithm",
+            "description": "Hash algorithm"
+          },
+          "format": {
+            "$ref": "#/components/schemas/schemas__hash__OutputFormat",
+            "description": "Output format"
+          },
+          "file_size": {
+            "type": "integer",
+            "title": "File Size",
+            "description": "Original file size in bytes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "hash",
+          "algorithm",
+          "format",
+          "file_size"
+        ],
+        "title": "HashFileResponse"
+      },
+      "HashGenerateRequest": {
+        "properties": {
+          "data": {
+            "type": "string",
+            "title": "Data",
+            "description": "Data to be hashed"
+          },
+          "algorithm": {
+            "$ref": "#/components/schemas/HashAlgorithm",
+            "description": "Hash algorithm",
+            "default": "sha256"
+          },
+          "hmac_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hmac Key",
+            "description": "HMAC key (optional)"
+          },
+          "output_format": {
+            "$ref": "#/components/schemas/schemas__hash__OutputFormat",
+            "description": "Output format (hex or base64)",
+            "default": "hex"
+          }
+        },
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "title": "HashGenerateRequest"
+      },
+      "HashGenerateResponse": {
+        "properties": {
+          "hash": {
+            "type": "string",
+            "title": "Hash"
+          },
+          "algorithm": {
+            "$ref": "#/components/schemas/HashAlgorithm"
+          },
+          "format": {
+            "$ref": "#/components/schemas/schemas__hash__OutputFormat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "hash",
+          "algorithm",
+          "format"
+        ],
+        "title": "HashGenerateResponse"
+      },
+      "HashVerifyRequest": {
+        "properties": {
+          "data": {
+            "type": "string",
+            "title": "Data",
+            "description": "Data to be verified"
+          },
+          "expected_hash": {
+            "type": "string",
+            "title": "Expected Hash",
+            "description": "Expected hash"
+          },
+          "algorithm": {
+            "$ref": "#/components/schemas/HashAlgorithm",
+            "description": "Hash algorithm"
+          },
+          "hmac_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hmac Key",
+            "description": "HMAC key (optional)"
+          },
+          "output_format": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/schemas__hash__OutputFormat"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Output format (auto-detect if not specified)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "data",
+          "expected_hash",
+          "algorithm"
+        ],
+        "title": "HashVerifyRequest"
+      },
+      "HashVerifyResponse": {
+        "properties": {
+          "valid": {
+            "type": "boolean",
+            "title": "Valid",
+            "description": "Whether the hash is valid"
+          },
+          "algorithm": {
+            "$ref": "#/components/schemas/HashAlgorithm",
+            "description": "Hash algorithm"
+          }
+        },
+        "type": "object",
+        "required": [
+          "valid",
+          "algorithm"
+        ],
+        "title": "HashVerifyResponse"
+      },
       "ModuleDrawerConfig": {
         "properties": {
           "type": {
@@ -693,17 +1147,6 @@
           "horizontal_bars"
         ],
         "title": "ModuleDrawerType"
-      },
-      "OutputFormat": {
-        "type": "string",
-        "enum": [
-          "png",
-          "svg",
-          "svg-path",
-          "svg-fragment",
-          "ascii"
-        ],
-        "title": "OutputFormat"
       },
       "PasswordAnalyzeRequest": {
         "properties": {
@@ -916,7 +1359,7 @@
             "default": "M"
           },
           "output_format": {
-            "$ref": "#/components/schemas/OutputFormat",
+            "$ref": "#/components/schemas/schemas__qr_generator__OutputFormat",
             "description": "Output format",
             "default": "png"
           },
@@ -1132,6 +1575,25 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "schemas__hash__OutputFormat": {
+        "type": "string",
+        "enum": [
+          "hex",
+          "base64"
+        ],
+        "title": "OutputFormat"
+      },
+      "schemas__qr_generator__OutputFormat": {
+        "type": "string",
+        "enum": [
+          "png",
+          "svg",
+          "svg-path",
+          "svg-fragment",
+          "ascii"
+        ],
+        "title": "OutputFormat"
       }
     }
   }

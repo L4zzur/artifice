@@ -188,6 +188,199 @@ export type HttpValidationError = {
 };
 
 /**
+ * HashAlgorithm
+ */
+export type HashAlgorithm =
+  | "md5"
+  | "sha1"
+  | "sha256"
+  | "sha512"
+  | "sha3_256"
+  | "sha3_512"
+  | "blake2b"
+  | "blake2s";
+
+/**
+ * HashAlgorithmSchema
+ */
+export type HashAlgorithmSchema = {
+  /**
+   * Name
+   *
+   * Hash algorithm name
+   */
+  name: string;
+  /**
+   * Output Bits
+   *
+   * Output length in bits
+   */
+  output_bits: number;
+  /**
+   * Output Hex Length
+   *
+   * Output length in hex characters
+   */
+  output_hex_length: number;
+  /**
+   * Output Base64 Length
+   *
+   * Output length in base64 characters
+   */
+  output_base64_length: number;
+  /**
+   * Security
+   *
+   * Security level
+   */
+  security: string;
+  /**
+   * Description
+   *
+   * Hash algorithm description
+   */
+  description: string;
+  /**
+   * Recommended
+   *
+   * Whether the algorithm is recommended
+   */
+  recommended: boolean;
+};
+
+/**
+ * HashFileRequest
+ */
+export type HashFileRequest = {
+  /**
+   * File Base64
+   *
+   * Base64 encoded file data
+   */
+  file_base64: string;
+  /**
+   * Hash algorithm
+   */
+  algorithm?: HashAlgorithm;
+  /**
+   * Output format
+   */
+  output_format?: SchemasHashOutputFormat;
+};
+
+/**
+ * HashFileResponse
+ */
+export type HashFileResponse = {
+  /**
+   * Hash
+   *
+   * Hash value
+   */
+  hash: string;
+  /**
+   * Hash algorithm
+   */
+  algorithm: HashAlgorithm;
+  /**
+   * Output format
+   */
+  format: SchemasHashOutputFormat;
+  /**
+   * File Size
+   *
+   * Original file size in bytes
+   */
+  file_size: number;
+};
+
+/**
+ * HashGenerateRequest
+ */
+export type HashGenerateRequest = {
+  /**
+   * Data
+   *
+   * Data to be hashed
+   */
+  data: string;
+  /**
+   * Hash algorithm
+   */
+  algorithm?: HashAlgorithm;
+  /**
+   * Hmac Key
+   *
+   * HMAC key (optional)
+   */
+  hmac_key?: string | null;
+  /**
+   * Output format (hex or base64)
+   */
+  output_format?: SchemasHashOutputFormat;
+};
+
+/**
+ * HashGenerateResponse
+ */
+export type HashGenerateResponse = {
+  /**
+   * Hash
+   */
+  hash: string;
+  algorithm: HashAlgorithm;
+  format: SchemasHashOutputFormat;
+};
+
+/**
+ * HashVerifyRequest
+ */
+export type HashVerifyRequest = {
+  /**
+   * Data
+   *
+   * Data to be verified
+   */
+  data: string;
+  /**
+   * Expected Hash
+   *
+   * Expected hash
+   */
+  expected_hash: string;
+  /**
+   * Hash algorithm
+   */
+  algorithm: HashAlgorithm;
+  /**
+   * Hmac Key
+   *
+   * HMAC key (optional)
+   */
+  hmac_key?: string | null;
+  /**
+   * Output format (auto-detect if not specified)
+   */
+  output_format?: SchemasHashOutputFormat | null;
+};
+
+/**
+ * HashVerifyResponse
+ */
+export type HashVerifyResponse = {
+  /**
+   * Valid
+   *
+   * Whether the hash is valid
+   */
+  valid: boolean;
+  /**
+   * Hash algorithm
+   */
+  algorithm: HashAlgorithm;
+};
+
+/**
  * ModuleDrawerConfig
  *
  * Configuration for module drawer styling
@@ -221,16 +414,6 @@ export type ModuleDrawerType =
   | "rounded"
   | "vertical_bars"
   | "horizontal_bars";
-
-/**
- * OutputFormat
- */
-export type OutputFormat =
-  | "png"
-  | "svg"
-  | "svg-path"
-  | "svg-fragment"
-  | "ascii";
 
 /**
  * PasswordAnalyzeRequest
@@ -413,7 +596,7 @@ export type QrCodeRequest = {
   /**
    * Output format
    */
-  output_format?: OutputFormat;
+  output_format?: SchemasQrGeneratorOutputFormat;
   /**
    * Final Size
    *
@@ -543,6 +726,21 @@ export type ValidationError = {
    */
   type: string;
 };
+
+/**
+ * OutputFormat
+ */
+export type SchemasHashOutputFormat = "hex" | "base64";
+
+/**
+ * OutputFormat
+ */
+export type SchemasQrGeneratorOutputFormat =
+  | "png"
+  | "svg"
+  | "svg-path"
+  | "svg-fragment"
+  | "ascii";
 
 export type GenerateQrCodeApiV1QrGeneratePostData = {
   body: QrCodeRequest;
@@ -730,6 +928,130 @@ export type AnalyzePasswordApiV1PasswordAnalyzePostResponses = {
 
 export type AnalyzePasswordApiV1PasswordAnalyzePostResponse =
   AnalyzePasswordApiV1PasswordAnalyzePostResponses[keyof AnalyzePasswordApiV1PasswordAnalyzePostResponses];
+
+export type GenerateHashApiV1HashGeneratePostData = {
+  body: HashGenerateRequest;
+  path?: never;
+  query?: never;
+  url: "/api/v1/hash/generate";
+};
+
+export type GenerateHashApiV1HashGeneratePostErrors = {
+  /**
+   * Bad Request
+   */
+  400: ErrorResponse;
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type GenerateHashApiV1HashGeneratePostError =
+  GenerateHashApiV1HashGeneratePostErrors[keyof GenerateHashApiV1HashGeneratePostErrors];
+
+export type GenerateHashApiV1HashGeneratePostResponses = {
+  /**
+   * Successful Response
+   */
+  200: HashGenerateResponse;
+};
+
+export type GenerateHashApiV1HashGeneratePostResponse =
+  GenerateHashApiV1HashGeneratePostResponses[keyof GenerateHashApiV1HashGeneratePostResponses];
+
+export type VerifyHashApiV1HashVerifyPostData = {
+  body: HashVerifyRequest;
+  path?: never;
+  query?: never;
+  url: "/api/v1/hash/verify";
+};
+
+export type VerifyHashApiV1HashVerifyPostErrors = {
+  /**
+   * Bad Request
+   */
+  400: ErrorResponse;
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type VerifyHashApiV1HashVerifyPostError =
+  VerifyHashApiV1HashVerifyPostErrors[keyof VerifyHashApiV1HashVerifyPostErrors];
+
+export type VerifyHashApiV1HashVerifyPostResponses = {
+  /**
+   * Successful Response
+   */
+  200: HashVerifyResponse;
+};
+
+export type VerifyHashApiV1HashVerifyPostResponse =
+  VerifyHashApiV1HashVerifyPostResponses[keyof VerifyHashApiV1HashVerifyPostResponses];
+
+export type ListAlgorithmsApiV1HashAlgorithmsGetData = {
+  body?: never;
+  path?: never;
+  query?: never;
+  url: "/api/v1/hash/algorithms";
+};
+
+export type ListAlgorithmsApiV1HashAlgorithmsGetResponses = {
+  /**
+   * Response List Algorithms Api V1 Hash Algorithms Get
+   *
+   * Successful Response
+   */
+  200: Array<HashAlgorithmSchema>;
+};
+
+export type ListAlgorithmsApiV1HashAlgorithmsGetResponse =
+  ListAlgorithmsApiV1HashAlgorithmsGetResponses[keyof ListAlgorithmsApiV1HashAlgorithmsGetResponses];
+
+export type HashFileApiV1HashFilePostData = {
+  body: HashFileRequest;
+  path?: never;
+  query?: never;
+  url: "/api/v1/hash/file";
+};
+
+export type HashFileApiV1HashFilePostErrors = {
+  /**
+   * Bad Request
+   */
+  400: ErrorResponse;
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError;
+  /**
+   * Internal Server Error
+   */
+  500: ErrorResponse;
+};
+
+export type HashFileApiV1HashFilePostError =
+  HashFileApiV1HashFilePostErrors[keyof HashFileApiV1HashFilePostErrors];
+
+export type HashFileApiV1HashFilePostResponses = {
+  /**
+   * Successful Response
+   */
+  200: HashFileResponse;
+};
+
+export type HashFileApiV1HashFilePostResponse =
+  HashFileApiV1HashFilePostResponses[keyof HashFileApiV1HashFilePostResponses];
 
 export type RootGetData = {
   body?: never;
