@@ -10,7 +10,7 @@ from schemas.password import (
     PasswordGenerateResponse,
 )
 from services.exceptions import ServiceError
-from services.password import PasswordGeneratorService
+from services.password_service import PasswordGeneratorService
 
 router = APIRouter(prefix="/password")
 
