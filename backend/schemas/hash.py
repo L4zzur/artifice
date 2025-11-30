@@ -70,6 +70,7 @@ class HashFileResponse(BaseModel):
 
 class HashAlgorithmSchema(BaseModel):
     name: str = Field(..., description="Hash algorithm name")
+    label: str = Field(..., description="Hash algorithm label")
     output_bits: int = Field(..., description="Output length in bits")
     output_hex_length: int = Field(..., description="Output length in hex characters")
     output_base64_length: int = Field(

@@ -16,6 +16,7 @@ async def list_algorithms():
     algorithms = [
         {
             "name": "md5",
+            "label": "MD5 (128-bit)",
             "output_bits": 128,
             "output_hex_length": 32,
             "output_base64_length": 24,
@@ -26,6 +27,7 @@ async def list_algorithms():
         },
         {
             "name": "sha1",
+            "label": "SHA-1 (160-bit)",
             "output_bits": 160,
             "output_hex_length": 40,
             "output_base64_length": 28,
@@ -36,6 +38,7 @@ async def list_algorithms():
         },
         {
             "name": "sha256",
+            "label": "SHA-256 (256-bit)",
             "output_bits": 256,
             "output_hex_length": 64,
             "output_base64_length": 44,
@@ -46,6 +49,7 @@ async def list_algorithms():
         },
         {
             "name": "sha512",
+            "label": "SHA-512 (512-bit)",
             "output_bits": 512,
             "output_hex_length": 128,
             "output_base64_length": 88,
@@ -55,6 +59,7 @@ async def list_algorithms():
         },
         {
             "name": "sha3_256",
+            "label": "SHA-3 (256-bit)",
             "output_bits": 256,
             "output_hex_length": 64,
             "output_base64_length": 44,
@@ -64,6 +69,7 @@ async def list_algorithms():
         },
         {
             "name": "sha3_512",
+            "label": "SHA-3 (512-bit)",
             "output_bits": 512,
             "output_hex_length": 128,
             "output_base64_length": 88,
@@ -73,6 +79,7 @@ async def list_algorithms():
         },
         {
             "name": "blake2b",
+            "label": "BLAKE2b (512-bit)",
             "output_bits": 512,
             "output_hex_length": 128,
             "output_base64_length": 88,
@@ -82,6 +89,7 @@ async def list_algorithms():
         },
         {
             "name": "blake2s",
+            "label": "BLAKE2s (256-bit)",
             "output_bits": 256,
             "output_hex_length": 64,
             "output_base64_length": 44,
