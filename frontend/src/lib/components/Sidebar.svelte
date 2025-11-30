@@ -10,6 +10,9 @@
     KeyRound,
     ShieldPlus,
     ShieldCheck,
+    CircleCheckBig,
+    Sparkles,
+    Fingerprint,
   } from "lucide-svelte";
 
   interface MenuItem {
@@ -47,6 +50,15 @@
       children: [
         { name: "Generator", path: "generate", icon: ShieldPlus },
         { name: "Analyzer", path: "analyze", icon: ShieldCheck },
+      ],
+    },
+    {
+      name: "Hash",
+      icon: Fingerprint,
+      href: "/hash",
+      children: [
+        { name: "Generator", path: "generate", icon: Sparkles },
+        { name: "Verifier", path: "verify", icon: CircleCheckBig },
       ],
     },
   ];

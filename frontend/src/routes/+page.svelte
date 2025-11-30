@@ -1,9 +1,9 @@
 <script lang="ts">
   import {
+    Fingerprint,
+    KeyRound,
     MegaphoneOff,
     QrCode,
-    Shield,
-    Sparkles,
     SquareCode,
     Zap,
   } from "lucide-svelte";
@@ -22,10 +22,17 @@
       comingSoon: false,
     },
     {
-      icon: Shield,
+      icon: KeyRound,
       title: "Password Tools",
       description: "Generate strong and secure passwords",
       href: "/password",
+      comingSoon: false,
+    },
+    {
+      icon: Fingerprint,
+      title: "Hash Tools",
+      description: "Generate and verify cryptographic hashes",
+      href: "/hash",
       comingSoon: false,
     },
     {
