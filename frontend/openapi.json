@@ -877,6 +877,11 @@
             "title": "Name",
             "description": "Hash algorithm name"
           },
+          "label": {
+            "type": "string",
+            "title": "Label",
+            "description": "Hash algorithm label"
+          },
           "output_bits": {
             "type": "integer",
             "title": "Output Bits",
@@ -911,6 +916,7 @@
         "type": "object",
         "required": [
           "name",
+          "label",
           "output_bits",
           "output_hex_length",
           "output_base64_length",

@@ -211,6 +211,12 @@ export type HashAlgorithmSchema = {
    */
   name: string;
   /**
+   * Label
+   *
+   * Hash algorithm label
+   */
+  label: string;
+  /**
    * Output Bits
    *
    * Output length in bits
