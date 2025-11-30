@@ -4,7 +4,6 @@ import {
   hashFileApiV1HashFilePost,
   listAlgorithmsApiV1HashAlgorithmsGet,
   verifyHashApiV1HashVerifyPost,
-  type HashAlgorithm,
   type HashAlgorithmSchema,
   type HashFileRequest,
   type HashFileResponse,
