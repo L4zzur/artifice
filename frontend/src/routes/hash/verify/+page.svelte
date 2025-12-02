@@ -5,12 +5,12 @@
     type HashVerifyRequest,
   } from "$lib/api/generated";
   import { verifyHash } from "$lib/api/hash";
-  import HashSettingsPanel from "$lib/components/hash/generator/HashSettingsPanel.svelte";
+  import HashSettingsPanel from "$lib/components/hash/HashSettingsPanel.svelte";
   import HashVerifyInputPanel from "$lib/components/hash/verifier/HashVerifyInputPanel.svelte";
   import HashVerifyResultPanel from "$lib/components/hash/verifier/HashVerifyResultPanel.svelte";
   import PageHeader from "$lib/components/ui/PageHeader.svelte";
   import Toast from "$lib/components/ui/Toast.svelte";
-  import { CircleCheckBig, CircleX, Sparkles } from "lucide-svelte";
+  import { CircleCheckBig, CircleX } from "lucide-svelte";
 
   let inputData = $state("");
   let expectedHash = $state("");

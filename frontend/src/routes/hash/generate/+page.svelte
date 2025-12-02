@@ -7,7 +7,7 @@
   import { generateHash } from "$lib/api/hash";
   import HashInputPanel from "$lib/components/hash/generator/HashInputPanel.svelte";
   import HashResultPanel from "$lib/components/hash/generator/HashResultPanel.svelte";
-  import HashSettingsPanel from "$lib/components/hash/generator/HashSettingsPanel.svelte";
+  import HashSettingsPanel from "$lib/components/hash/HashSettingsPanel.svelte";
   import PageHeader from "$lib/components/ui/PageHeader.svelte";
   import Toast from "$lib/components/ui/Toast.svelte";
   import { CircleX, Sparkles } from "lucide-svelte";
