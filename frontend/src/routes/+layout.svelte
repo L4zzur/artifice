@@ -2,6 +2,7 @@
   import { page } from "$app/stores";
   import favicon from "$lib/assets/favicon.svg";
   import Sidebar from "$lib/components/Sidebar.svelte";
+  import Footer from "$lib/components/Footer.svelte";
   import "$lib/styles/theme.css";
 
   let { children } = $props();
@@ -19,9 +20,12 @@
 <div class="app-layout">
   <Sidebar />
 
-  <main>
-    {@render children()}
-  </main>
+  <div class="content-wrapper">
+    <main>
+      {@render children()}
+    </main>
+    <Footer />
+  </div>
 </div>
 
 <style>
@@ -42,8 +46,21 @@
       var(--md-sys-color-background);
   }
 
+  .content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
   main {
     flex: 1;
     padding: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    main {
+      padding: 1rem;
+    }
   }
 </style>
