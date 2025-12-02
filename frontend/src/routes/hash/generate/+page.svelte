@@ -28,7 +28,7 @@
   async function handleGenerate() {
     if (!inputData.trim()) {
       generatedHash = null;
-      error = null;
+      error = "Please enter data";
       return;
     }
 
