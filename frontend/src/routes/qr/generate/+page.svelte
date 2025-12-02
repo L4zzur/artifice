@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ImageIcon, QrCode } from "lucide-svelte";
+  import { CircleX, ImageIcon, QrCode } from "lucide-svelte";
   import {
     generateQRCode,
     type ColorMaskType,
@@ -261,6 +261,13 @@
     {/snippet}
   </PageHeader>
 
+  {#if error}
+    <div class="error-message">
+      <CircleX size={18} />
+      {error}
+    </div>
+  {/if}
+
   <div class="generator-layout">
     <section class="settings-panel">
       <h2>Settings</h2>
@@ -344,10 +351,6 @@
       <Button fullWidth disabled={isLoading} onclick={handleGenerate}>
         {isLoading ? "Generating..." : "Generate QR Code"}
       </Button>
-
-      {#if error}
-        <div class="error-message">{error}</div>
-      {/if}
     </section>
 
     <QRResultPanel {generatedQR} {isLoading} onDownload={downloadQR} />
@@ -401,11 +404,15 @@
   }
 
   .error-message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     margin-top: 1rem;
     padding: 0.75rem;
     background: var(--md-sys-color-error-container);
-    color: var(--md-sys-color-error);
-    border-radius: var(--md-sys-shape-corner-small);
+    color: var(--md-sys-color-on-error-container);
+    border-radius: var(--md-sys-shape-corner-medium);
+    font-size: 0.9rem;
   }
 
   .info-banner {

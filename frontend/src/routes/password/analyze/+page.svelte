@@ -5,7 +5,7 @@
   import PasswordInputPanel from "$lib/components/password/analyzer/PasswordInputPanel.svelte";
   import PageHeader from "$lib/components/ui/PageHeader.svelte";
   import Toast from "$lib/components/ui/Toast.svelte";
-  import { ShieldCheck } from "lucide-svelte";
+  import { CircleX, ShieldCheck } from "lucide-svelte";
 
   let toastMessage = $state<string | null>(null);
   let toastTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -82,6 +82,13 @@
     {/snippet}
   </PageHeader>
 
+  {#if error}
+    <div class="error-message">
+      <CircleX size={18} />
+      {error}
+    </div>
+  {/if}
+
   <div class="analyzer-layout">
     <PasswordInputPanel bind:password />
 
@@ -92,10 +99,6 @@
   </div>
 
   <Toast message={toastMessage} onClose={() => (toastMessage = null)} />
-
-  {#if error}
-    <div class="error-message">{error}</div>
-  {/if}
 </div>
 
 <style>
@@ -120,10 +123,14 @@
   }
 
   .error-message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     margin-top: 1rem;
-    padding: 1rem;
+    padding: 0.75rem;
     background: var(--md-sys-color-error-container);
     color: var(--md-sys-color-on-error-container);
     border-radius: var(--md-sys-shape-corner-medium);
+    font-size: 0.9rem;
   }
 </style>

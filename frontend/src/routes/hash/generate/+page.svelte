@@ -10,7 +10,7 @@
   import HashSettingsPanel from "$lib/components/hash/generator/HashSettingsPanel.svelte";
   import PageHeader from "$lib/components/ui/PageHeader.svelte";
   import Toast from "$lib/components/ui/Toast.svelte";
-  import { Sparkles } from "lucide-svelte";
+  import { CircleX, Sparkles } from "lucide-svelte";
 
   let inputData = $state("");
   let algorithm = $state<HashAlgorithm>("sha256");
@@ -116,6 +116,13 @@
     {/snippet}
   </PageHeader>
 
+  {#if error}
+    <div class="error-message">
+      <CircleX size={18} />
+      {error}
+    </div>
+  {/if}
+
   <div class="generator-layout">
     <div class="left-column">
       <HashInputPanel bind:inputData />
@@ -125,10 +132,6 @@
 
     <HashResultPanel hash={generatedHash} onCopy={handleCopy} />
   </div>
-
-  {#if error}
-    <div class="error-message">{error}</div>
-  {/if}
 
   <Toast message={toastMessage} onClose={() => (toastMessage = null)} />
 </div>
@@ -161,10 +164,14 @@
   }
 
   .error-message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     margin-top: 1rem;
-    padding: 1rem;
+    padding: 0.75rem;
     background: var(--md-sys-color-error-container);
     color: var(--md-sys-color-on-error-container);
     border-radius: var(--md-sys-shape-corner-medium);
+    font-size: 0.9rem;
   }
 </style>

@@ -121,6 +121,13 @@
     {/snippet}
   </PageHeader>
 
+  {#if error}
+    <div class="error-message">
+      <CircleX size={18} />
+      {error}
+    </div>
+  {/if}
+
   <div class="scanner-layout">
     <section class="upload-panel">
       <h2>Settings</h2>
@@ -147,13 +154,6 @@
           <span>Scan QR Code</span>
         {/if}
       </Button>
-
-      {#if error}
-        <div class="error-message">
-          <CircleX size={18} />
-          {error}
-        </div>
-      {/if}
     </section>
 
     <section class="result-panel">
@@ -266,7 +266,7 @@
     padding: 0.75rem;
     background: var(--md-sys-color-error-container);
     color: var(--md-sys-color-on-error-container);
-    border-radius: var(--md-sys-shape-corner-small);
+    border-radius: var(--md-sys-shape-corner-medium);
     font-size: 0.9rem;
   }
 
