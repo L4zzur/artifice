@@ -20,7 +20,7 @@
       title: "Hash Verifier",
       description: "Verify data integrity with hash comparison",
       href: "/hash/verify",
-      comingSoon: true,
+      comingSoon: false,
     },
   ];
 </script>
