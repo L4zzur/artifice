@@ -10,7 +10,7 @@
   <h2>Input Data</h2>
 
   <div class="input-group">
-    <label for="input-data" class="input-label"> Enter data to hash </label>
+    <label for="input-data" class="input-label"> Data to hash </label>
 
     <textarea
       id="input-data"

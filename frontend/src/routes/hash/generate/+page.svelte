@@ -123,12 +123,7 @@
       <HashSettingsPanel bind:algorithm bind:outputFormat bind:hmacKey />
     </div>
 
-    <HashResultPanel
-      hash={generatedHash}
-      {isLoading}
-      onCopy={handleCopy}
-      onGenerate={handleGenerate}
-    />
+    <HashResultPanel hash={generatedHash} onCopy={handleCopy} />
   </div>
 
   {#if error}

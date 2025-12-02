@@ -1,16 +1,13 @@
 <script lang="ts">
   import Button from "$lib/components/ui/Button.svelte";
-  import Spinner from "$lib/components/ui/Spinner.svelte";
   import { Copy, RefreshCcw } from "lucide-svelte";
 
   interface Props {
     hash: string | null;
-    isLoading: boolean;
     onCopy: () => void;
-    onGenerate: () => void;
   }
 
-  let { hash, isLoading, onCopy, onGenerate }: Props = $props();
+  let { hash, onCopy }: Props = $props();
 </script>
 
 <section class="result-panel">
