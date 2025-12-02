@@ -17,7 +17,7 @@
       bind:value={inputData}
       placeholder="Hello, World!"
       class="input-data"
-      rows="6"
+      rows="2"
       spellcheck="false"
     ></textarea>
 
