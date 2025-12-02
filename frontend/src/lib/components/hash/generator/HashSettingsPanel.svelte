@@ -72,33 +72,34 @@
   <h2>Settings</h2>
 
   <div class="settings-grid">
-    <FormGroup label="Hash Algorithm">
-      {#if isLoadingAlgorithms}
-        <div class="loading-select">Loading algorithms...</div>
-      {:else if algorithmError}
-        <div class="error-select">{algorithmError}</div>
-      {:else}
-        <select bind:value={algorithm} class="select-input">
-          {#each algorithms as algo}
-            <option value={algo.name} title={algo.description}>
-              {algo.label}
-              {#if algo.recommended}
-                ⭐
-              {/if}
-              - {algo.security}
-            </option>
-          {/each}
+    <div class="settings-row">
+      <FormGroup label="Hash Algorithm">
+        {#if isLoadingAlgorithms}
+          <div class="loading-select">Loading algorithms...</div>
+        {:else if algorithmError}
+          <div class="error-select">{algorithmError}</div>
+        {:else}
+          <select bind:value={algorithm} class="select-input">
+            {#each algorithms as algo}
+              <option value={algo.name} title={algo.description}>
+                {algo.label}
+                {#if algo.recommended}
+                  ⭐
+                {/if}
+                - {algo.security}
+              </option>
+            {/each}
+          </select>
+        {/if}
+      </FormGroup>
+
+      <FormGroup label="Output Format">
+        <select bind:value={outputFormat} class="select-input">
+          <option value="hex">Hex</option>
+          <option value="base64">Base64</option>
         </select>
-      {/if}
-    </FormGroup>
-
-    <FormGroup label="Output Format">
-      <select bind:value={outputFormat} class="select-input">
-        <option value="hex">Hex</option>
-        <option value="base64">Base64</option>
-      </select>
-    </FormGroup>
-
+      </FormGroup>
+    </div>
     <FormGroup label="HMAC Key (optional)">
       <input
         type="text"
@@ -129,6 +130,12 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+  }
+
+  .settings-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
   }
 
   .select-input,
