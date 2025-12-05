@@ -328,14 +328,16 @@
       {/if}
 
       <SettingsSection h3="Embedded Logo" icon={ImageIcon}>
-        <ImageUpload
-          preview={embeddedImagePreview}
-          label="Click to upload logo"
-          hint="PNG, JPG, WEBP up to 3MB"
-          onUpload={handleLogoUpload}
-          onRemove={removeLogo}
-          onError={(msg) => (error = msg)}
-        />
+        <div class="upload-content">
+          <ImageUpload
+            preview={embeddedImagePreview}
+            label="Click to upload logo"
+            hint="PNG, JPG, WEBP up to 3MB"
+            onUpload={handleLogoUpload}
+            onRemove={removeLogo}
+            onError={(msg) => (error = msg)}
+          />
+        </div>
 
         {#if embeddedImagePreview}
           <div class="info-banner">
@@ -401,6 +403,14 @@
     border-radius: var(--md-sys-shape-corner-small);
     color: var(--md-sys-color-on-surface);
     font-size: 0.95rem;
+  }
+
+  .upload-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    margin-bottom: 1rem;
   }
 
   .error-message {

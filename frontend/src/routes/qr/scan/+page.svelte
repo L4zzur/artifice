@@ -132,15 +132,17 @@
     <section class="upload-panel">
       <h2>Settings</h2>
 
-      <ImageUpload
-        preview={imagePreview}
-        label="Upload image containing QR code"
-        hint="PNG, JPG, WEBP up to 5MB"
-        maxSize={5}
-        onUpload={handleImageUpload}
-        onRemove={handleImageRemove}
-        onError={(msg) => (error = msg)}
-      />
+      <div class="upload-content">
+        <ImageUpload
+          preview={imagePreview}
+          label="Upload image containing QR code"
+          hint="PNG, JPG, WEBP up to 5MB"
+          maxSize={5}
+          onUpload={handleImageUpload}
+          onRemove={handleImageRemove}
+          onError={(msg) => (error = msg)}
+        />
+      </div>
 
       <Button
         fullWidth
@@ -214,7 +216,7 @@
       {:else}
         <div class="placeholder">
           <ScanBarcode size={64} strokeWidth={2} />
-          <p>Upload and image to scan</p>
+          <p>Upload an image to scan</p>
           <small>Supports multiple QR codes in a single image</small>
         </div>
       {/if}
@@ -249,13 +251,25 @@
     border: 1px solid var(--md-sys-color-outline-variant);
     border-radius: var(--md-sys-shape-corner-large);
     padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 400px;
   }
 
   h2 {
     font-size: 1.25rem;
     font-weight: 600;
-    margin: 0 0 1.5rem 0;
+    margin: 0 0 1rem 0;
     color: var(--md-sys-color-on-surface);
+    flex-shrink: 0;
+  }
+
+  .upload-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    margin-bottom: 1rem;
   }
 
   .error-message {
@@ -281,6 +295,8 @@
     color: var(--md-sys-color-on-surface-variant);
     text-align: center;
     padding: 2rem;
+    flex: 1;
+    min-height: 0;
   }
 
   .placeholder p {
@@ -294,6 +310,7 @@
   }
 
   .results-container {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 1rem;

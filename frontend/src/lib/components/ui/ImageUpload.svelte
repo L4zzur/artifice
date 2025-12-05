@@ -90,7 +90,9 @@
 
 <style>
   .upload-area {
-    margin: 0.5rem 0 0.75rem 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   .upload-label {
@@ -99,12 +101,14 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 2rem;
+    padding: 1.5rem;
     border: 2px dashed var(--md-sys-color-outline-variant);
     border-radius: var(--md-sys-shape-corner-medium);
     cursor: pointer;
     transition: all var(--md-sys-color-primary);
     color: var(--md-sys-color-on-surface-variant);
+    flex: 1;
+    min-height: 0;
   }
 
   .upload-label:hover {
@@ -121,13 +125,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.75rem;
-    margin: 0.5rem 0 0.5rem 0;
+    gap: 1rem;
+    flex: 1;
+    justify-content: center;
   }
 
   .uploaded-preview img {
-    max-width: 150px;
-    max-height: 150px;
+    max-width: 100%;
+    max-height: 200px;
+    width: auto;
+    height: auto;
     border-radius: var(--md-sys-shape-corner-small);
     border: 1px solid var(--md-sys-color-outline-variant);
     display: block;
