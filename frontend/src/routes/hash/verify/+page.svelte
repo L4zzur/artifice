@@ -4,16 +4,23 @@
     type HashAlgorithm,
     type HashVerifyRequest,
   } from "$lib/api/generated";
-  import { verifyHash } from "$lib/api/hash";
+  import { verifyHash, hashFile } from "$lib/api/hash";
+  import type { HashFileRequest } from "$lib/api/generated";
   import HashSettingsPanel from "$lib/components/hash/HashSettingsPanel.svelte";
-  import HashVerifyInputPanel from "$lib/components/hash/verifier/HashVerifyInputPanel.svelte";
+  import HashInputPanel from "$lib/components/hash/HashInputPanel.svelte";
   import HashVerifyResultPanel from "$lib/components/hash/verifier/HashVerifyResultPanel.svelte";
   import PageHeader from "$lib/components/ui/PageHeader.svelte";
   import Toast from "$lib/components/ui/Toast.svelte";
   import { CircleCheckBig, CircleX } from "lucide-svelte";
+  import ExpectedHashInput from "$lib/components/hash/verifier/ExpectedHashInput.svelte";
 
+  type InputMode = "text" | "file";
+
+  let inputMode = $state<InputMode>("text");
   let inputData = $state("");
+  let uploadedFile = $state<File | null>(null);
   let expectedHash = $state("");
+
   let algorithm = $state<HashAlgorithm>("sha256");
   let outputFormat = $state<SchemasHashOutputFormat>("hex");
   let hmacKey = $state("");
@@ -27,7 +34,19 @@
   let toastMessage = $state<string | null>(null);
   let toastTimeout: ReturnType<typeof setTimeout> | null = null;
 
-  async function handleVerify() {
+  function fileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        resolve(result);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function handleVerifyFromText() {
     const dataTrimmed = inputData.trim();
     const hashTrimmed = expectedHash.trim();
 
@@ -47,7 +66,7 @@
       const request: HashVerifyRequest = {
         data: dataTrimmed,
         expected_hash: hashTrimmed,
-        algorithm: algorithm,
+        algorithm,
         hmac_key: hmacKey || null,
       };
 
@@ -64,6 +83,81 @@
     } finally {
       isLoading = false;
     }
+  }
+
+  async function handleVerifyFromFile() {
+    if (!uploadedFile) {
+      isValid = null;
+      verifiedAlgorithm = null;
+      error = "Please upload a file and enter expected hash";
+      return;
+    }
+
+    const hashTrimmed = expectedHash.trim();
+    if (!hashTrimmed) {
+      isValid = null;
+      verifiedAlgorithm = null;
+      error = "Please enter expected hash";
+      return;
+    }
+
+    isLoading = true;
+    error = null;
+    isValid = null;
+    verifiedAlgorithm = null;
+
+    try {
+      const base64 = await fileToBase64(uploadedFile);
+
+      const fileReq: HashFileRequest = {
+        file_base64: base64,
+        algorithm,
+        output_format: outputFormat,
+      };
+
+      const fileHashResult = await hashFile(fileReq);
+
+      const verifyReq: HashVerifyRequest = {
+        data: "",
+        expected_hash: hashTrimmed,
+        algorithm,
+        hmac_key: hmacKey || null,
+        output_format: outputFormat,
+      };
+
+      const valid = fileHashResult.hash === hashTrimmed;
+      isValid = valid;
+      verifiedAlgorithm = algorithm;
+    } catch (e) {
+      if (e instanceof Error) {
+        error = e.message;
+      } else {
+        error = "An unexpected error occurred";
+      }
+      console.error("File verify error:", e);
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  async function handleVerify() {
+    if (inputMode === "text") {
+      await handleVerifyFromText();
+    } else {
+      await handleVerifyFromFile();
+    }
+  }
+
+  function handleModeChange(mode: InputMode) {
+    inputMode = mode;
+    isValid = null;
+    error = null;
+  }
+
+  function handleFileSelect(file: File | null) {
+    uploadedFile = file;
+    isValid = null;
+    error = null;
   }
 
   function showToast(message: string, duration: number = 4000) {
@@ -99,7 +193,19 @@
 
   <div class="verifier-layout">
     <div class="left-column">
-      <HashVerifyInputPanel bind:inputData bind:expectedHash />
+      <HashInputPanel
+        bind:inputData
+        bind:uploadedFile
+        bind:inputMode
+        onModeChange={handleModeChange}
+        onFileSelect={handleFileSelect}
+        textLabel={inputMode === "text" ? "Data to verify" : "File to verify"}
+        textPlaceholder="Original data to verify..."
+        textRows={2}
+        maxFileSizeMB={15}
+      />
+
+      <ExpectedHashInput bind:expectedHash />
 
       <HashSettingsPanel bind:algorithm bind:outputFormat bind:hmacKey />
     </div>
@@ -133,7 +239,7 @@
   .left-column {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
   }
 
   @media (max-width: 900px) {
