@@ -1,6 +1,7 @@
 <script lang="ts">
   import Button from "$lib/components/ui/Button.svelte";
-  import { Copy, RefreshCcw } from "lucide-svelte";
+  import Panel from "$lib/components/ui/Panel.svelte";
+  import { Copy } from "lucide-svelte";
 
   interface Props {
     hash: string | null;
@@ -10,9 +11,7 @@
   let { hash, onCopy }: Props = $props();
 </script>
 
-<section class="result-panel">
-  <h2>Generated Hash</h2>
-
+<Panel title="Generated Hash">
   {#if hash}
     <div class="hash-display">
       <div class="hash-value">
@@ -29,23 +28,9 @@
       <p>Your generated hash will appear here</p>
     </div>
   {/if}
-</section>
+</Panel>
 
 <style>
-  .result-panel {
-    background: var(--md-sys-color-surface-container);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-large);
-    padding: 2rem;
-  }
-
-  h2 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin: 0 0 1.5rem 0;
-    color: var(--md-sys-color-on-surface);
-  }
-
   .hash-display {
     display: flex;
     flex-direction: column;
@@ -77,6 +62,7 @@
     padding: 3rem 1rem;
     text-align: center;
   }
+
   .placeholder p {
     margin: 0;
     color: var(--md-sys-color-on-surface-variant);

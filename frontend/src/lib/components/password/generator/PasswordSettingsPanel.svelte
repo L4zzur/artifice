@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Panel from "$lib/components/ui/Panel.svelte";
   import FormGroup from "../../ui/FormGroup.svelte";
 
   interface Props {
@@ -20,8 +21,7 @@
   }: Props = $props();
 </script>
 
-<section class="settings-panel">
-  <h2>Settings</h2>
+<Panel title="Settings">
   <div class="settings-form">
     <FormGroup label="Length: {length}" id="length">
       <input id="length" type="range" min="4" max="64" bind:value={length} />
@@ -54,23 +54,9 @@
       </label>
     </div>
   </div>
-</section>
+</Panel>
 
 <style>
-  .settings-panel {
-    background: var(--md-sys-color-surface-container);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-large);
-    padding: 2rem;
-  }
-
-  h2 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin: 0 0 1.5rem 0;
-    color: var(--md-sys-color-on-surface);
-  }
-
   .settings-form {
     display: flex;
     flex-direction: column;

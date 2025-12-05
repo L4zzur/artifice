@@ -20,6 +20,7 @@
   import QRResultPanel from "$lib/components/qr/generator/QRResultPanel.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import PageHeader from "$lib/components/ui/PageHeader.svelte";
+  import Panel from "$lib/components/ui/Panel.svelte";
 
   let qrData = $state("https://example.com");
   let errorCorrection = $state<ErrorCorrectionLevel>("M");
@@ -269,9 +270,7 @@
   {/if}
 
   <div class="generator-layout">
-    <section class="settings-panel">
-      <h2>Settings</h2>
-
+    <Panel title="Settings">
       <FormGroup label="Data to encode" id="qr-data">
         <input
           id="qr-data"
@@ -353,7 +352,7 @@
       <Button fullWidth disabled={isLoading} onclick={handleGenerate}>
         {isLoading ? "Generating..." : "Generate QR Code"}
       </Button>
-    </section>
+    </Panel>
 
     <QRResultPanel {generatedQR} {isLoading} onDownload={downloadQR} />
   </div>
@@ -378,20 +377,6 @@
     .generator-layout {
       grid-template-columns: 1fr;
     }
-  }
-
-  .settings-panel {
-    background: var(--md-sys-color-surface-container);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-large);
-    padding: 2rem;
-  }
-
-  h2 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin: 0 0 1.5rem 0;
-    color: var(--md-sys-color-on-surface);
   }
 
   input[type="text"],

@@ -1,5 +1,7 @@
 <script lang="ts">
   import { FileText, Upload, X } from "lucide-svelte";
+  import Panel from "$lib/components/ui/Panel.svelte";
+  import ModeToggle from "$lib/components/ui/ModeToggle.svelte";
 
   type InputMode = "text" | "file";
 
@@ -31,6 +33,11 @@
 
   let isDragging = $state(false);
   let fileError = $state<string | null>(null);
+
+  const modeOptions = [
+    { value: "text" as const, label: "Text" },
+    { value: "file" as const, label: "File" },
+  ];
 
   function handleFileInput(event: Event) {
     const target = event.target as HTMLInputElement;
@@ -78,27 +85,17 @@
   }
 </script>
 
-<section class="input-panel">
-  <div class="header">
-    <h2>Input Data</h2>
-
-    <div class="mode-toggle">
-      <button
-        class="mode-button {inputMode === 'text' ? 'active' : ''}"
-        onclick={() => onModeChange("text")}
-        aria-label="Switch to text input mode"
-      >
-        Text
-      </button>
-      <button
-        class="mode-button {inputMode === 'file' ? 'active' : ''}"
-        onclick={() => onModeChange("file")}
-        aria-label="Switch to file upload mode"
-      >
-        File
-      </button>
+<Panel height="240px">
+  {#snippet header()}
+    <div class="header">
+      <h2>Input Data</h2>
+      <ModeToggle
+        options={modeOptions}
+        selected={inputMode}
+        onChange={onModeChange}
+      />
     </div>
-  </div>
+  {/snippet}
 
   <div class="input">
     {#if inputMode === "text"}
@@ -173,20 +170,9 @@
       </div>
     {/if}
   </div>
-</section>
+</Panel>
 
 <style>
-  .input-panel {
-    background: var(--md-sys-color-surface-container);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-large);
-    padding: 1.5rem;
-    display: flex;
-    height: 240px;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
   .header {
     display: flex;
     justify-content: space-between;
@@ -199,38 +185,6 @@
     font-weight: 600;
     margin: 0;
     color: var(--md-sys-color-on-surface);
-  }
-
-  .mode-toggle {
-    display: flex;
-    gap: 0.25rem;
-    padding: 0.25rem;
-    background: var(--md-sys-color-surface-container);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-medium);
-    width: fit-content;
-  }
-
-  .mode-button {
-    padding: 0.375rem 1rem;
-    background: none;
-    border: none;
-    border-radius: var(--md-sys-shape-corner-small);
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--md-sys-color-on-surface-variant);
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .mode-button:hover {
-    background: var(--md-sys-color-surface-container-high);
-    color: var(--md-sys-color-on-surface);
-  }
-
-  .mode-button.active {
-    background: var(--md-sys-color-primary);
-    color: var(--md-sys-color-on-primary);
   }
 
   .input {

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Check, Copy, Download, QrCode } from "lucide-svelte";
   import Button from "$lib/components/ui/Button.svelte";
+  import Panel from "$lib/components/ui/Panel.svelte";
 
   interface Props {
     generatedQR: string | null;
@@ -31,9 +32,7 @@
   }
 </script>
 
-<section class="result-panel">
-  <h2>Result</h2>
-
+<Panel title="Result">
   {#if isLoading}
     <div class="loading-state">
       <div class="spinner"></div>
@@ -68,23 +67,9 @@
       <p>Your QR code will appear here</p>
     </div>
   {/if}
-</section>
+</Panel>
 
 <style>
-  .result-panel {
-    background: var(--md-sys-color-surface-container);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-large);
-    padding: 2rem;
-  }
-
-  h2 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin: 0 0 1.5rem 0;
-    color: var(--md-sys-color-on-surface);
-  }
-
   .qr-result {
     display: flex;
     flex-direction: column;

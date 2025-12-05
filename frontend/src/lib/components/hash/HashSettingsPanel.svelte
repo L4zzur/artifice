@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import FormGroup from "$lib/components/ui/FormGroup.svelte";
+  import Panel from "$lib/components/ui/Panel.svelte";
   import {
     type HashAlgorithmSchema,
     type HashAlgorithm,
@@ -68,9 +69,7 @@
   });
 </script>
 
-<section class="settings-panel">
-  <h2>Settings</h2>
-
+<Panel title="Settings">
   <div class="settings-grid">
     <div class="settings-row">
       <FormGroup label="Hash Algorithm">
@@ -109,23 +108,9 @@
       />
     </FormGroup>
   </div>
-</section>
+</Panel>
 
 <style>
-  .settings-panel {
-    background: var(--md-sys-color-surface-container);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-large);
-    padding: 1.5rem;
-  }
-
-  h2 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin: 0 0 1rem 0;
-    color: var(--md-sys-color-on-surface);
-  }
-
   .settings-grid {
     display: flex;
     flex-direction: column;

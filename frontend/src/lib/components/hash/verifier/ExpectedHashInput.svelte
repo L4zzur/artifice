@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Panel from "$lib/components/ui/Panel.svelte";
+
   interface Props {
     expectedHash: string;
   }
@@ -6,9 +8,7 @@
   let { expectedHash = $bindable() }: Props = $props();
 </script>
 
-<section class="input-panel">
-  <h2>Expected Hash</h2>
-
+<Panel title="Expected Hash">
   <div class="input-group">
     <label for="expected-hash" class="input-label">Hash to compare</label>
 
@@ -27,26 +27,9 @@
       </p>
     {/if}
   </div>
-</section>
+</Panel>
 
 <style>
-  .input-panel {
-    background: var(--md-sys-color-surface-container);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-large);
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  h2 {
-    font-size: 1.125rem;
-    font-weight: 600;
-    margin: 0 0 0.3rem 0;
-    color: var(--md-sys-color-on-surface);
-  }
-
   .input-group {
     display: flex;
     flex-direction: column;

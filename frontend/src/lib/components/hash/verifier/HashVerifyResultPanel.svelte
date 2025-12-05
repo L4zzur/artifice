@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { HashAlgorithm } from "$lib/api/generated";
   import Button from "$lib/components/ui/Button.svelte";
+  import Panel from "$lib/components/ui/Panel.svelte";
   import Spinner from "$lib/components/ui/Spinner.svelte";
   import { CircleCheck, CircleX, ShieldQuestionMark } from "lucide-svelte";
 
@@ -14,9 +15,7 @@
   let { isValid, isLoading, verifiedAlgorithm, onVerify }: Props = $props();
 </script>
 
-<section class="result-panel">
-  <h2>Verification Result</h2>
-
+<Panel title="Verification Result">
   <div class="content">
     {#if isLoading}
       <div class="state state-loading">
@@ -59,23 +58,9 @@
       Verify Hash
     </Button>
   </div>
-</section>
+</Panel>
 
 <style>
-  .result-panel {
-    background: var(--md-sys-color-surface-container);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-large);
-    padding: 1.5rem;
-  }
-
-  h2 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin: 0 0 1.5rem 0;
-    color: var(--md-sys-color-on-surface);
-  }
-
   .content {
     display: flex;
     flex-direction: column;

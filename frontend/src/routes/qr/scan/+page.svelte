@@ -3,6 +3,7 @@
   import Button from "$lib/components/ui/Button.svelte";
   import ImageUpload from "$lib/components/ui/ImageUpload.svelte";
   import PageHeader from "$lib/components/ui/PageHeader.svelte";
+  import Panel from "$lib/components/ui/Panel.svelte";
   import Spinner from "$lib/components/ui/Spinner.svelte";
   import Toast from "$lib/components/ui/Toast.svelte";
   import {
@@ -129,9 +130,7 @@
   {/if}
 
   <div class="scanner-layout">
-    <section class="upload-panel">
-      <h2>Settings</h2>
-
+    <Panel title="Settings">
       <div class="upload-content">
         <ImageUpload
           preview={imagePreview}
@@ -156,11 +155,9 @@
           <span>Scan QR Code</span>
         {/if}
       </Button>
-    </section>
+    </Panel>
 
-    <section class="result-panel">
-      <h2>Results</h2>
-
+    <Panel title="Results">
       {#if isScanning}
         <Spinner message="Scanning QR code..." />
       {:else if hasScanned && scannedCodes.length > 0}
@@ -220,7 +217,7 @@
           <small>Supports multiple QR codes in a single image</small>
         </div>
       {/if}
-    </section>
+    </Panel>
   </div>
 
   <Toast message={toastMessage} onClose={() => (toastMessage = null)} />
@@ -243,25 +240,6 @@
     .scanner-layout {
       grid-template-columns: 1fr;
     }
-  }
-
-  .upload-panel,
-  .result-panel {
-    background: var(--md-sys-color-surface-container);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-large);
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    min-height: 400px;
-  }
-
-  h2 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin: 0 0 1rem 0;
-    color: var(--md-sys-color-on-surface);
-    flex-shrink: 0;
   }
 
   .upload-content {

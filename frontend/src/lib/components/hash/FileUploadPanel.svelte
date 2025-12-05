@@ -1,6 +1,6 @@
 <script lang="ts">
+  import Panel from "$lib/components/ui/Panel.svelte";
   import { FileText, Upload, X } from "lucide-svelte";
-
   interface Props {
     file: File | null;
     onFileSelect: (file: File | null) => void;
@@ -58,9 +58,7 @@
   }
 </script>
 
-<section class="file-panel">
-  <h2>Upload File</h2>
-
+<Panel title="Upload File">
   {#if !file}
     <div
       class="dropzone {isDragging ? 'dragging' : ''}"
@@ -108,23 +106,9 @@
   {#if error}
     <div class="error-box">{error}</div>
   {/if}
-</section>
+</Panel>
 
 <style>
-  .file-panel {
-    background: var(--md-sys-color-surface-container);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-large);
-    padding: 1.5rem;
-  }
-
-  h2 {
-    font-size: 1.125rem;
-    font-weight: 600;
-    margin: 0 0 1rem 0;
-    color: var(--md-sys-color-on-surface);
-  }
-
   .dropzone {
     position: relative;
     border: 2px dashed var(--md-sys-color-outline-variant);

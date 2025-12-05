@@ -15,7 +15,6 @@
   let isAnalyzing = $state(false);
   let error = $state<string | null>(null);
 
-  // Дебаунс для предотвращения частых запросов
   let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
   async function handleAnalyze() {
@@ -29,7 +28,6 @@
       return;
     }
 
-    // Задержка перед анализом (500мс)
     debounceTimer = setTimeout(async () => {
       isAnalyzing = true;
       error = null;
@@ -51,9 +49,7 @@
     }, 500);
   }
 
-  // Автоматический анализ при изменении пароля
   $effect(() => {
-    // Триггер на изменение пароля
     password;
     handleAnalyze();
   });

@@ -3,6 +3,7 @@
   import { Copy, RefreshCcw } from "lucide-svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import PasswordStrength from "../PasswordStrength.svelte";
+  import Panel from "$lib/components/ui/Panel.svelte";
 
   interface Props {
     password: string | null;
@@ -14,9 +15,7 @@
   let { password, strengthInfo, onCopy, onGenerate }: Props = $props();
 </script>
 
-<section class="result-panel">
-  <h2>Generated Password</h2>
-
+<Panel title="Generated Password">
   {#if password}
     <div class="password-display">
       <div class="password-value">{password}</div>
@@ -36,23 +35,9 @@
       <PasswordStrength {strengthInfo} />
     {/if}
   {/if}
-</section>
+</Panel>
 
 <style>
-  .result-panel {
-    background: var(--md-sys-color-surface-container);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-large);
-    padding: 2rem;
-  }
-
-  h2 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin: 0 0 1.5rem 0;
-    color: var(--md-sys-color-on-surface);
-  }
-
   .password-display {
     display: flex;
     flex-direction: column;

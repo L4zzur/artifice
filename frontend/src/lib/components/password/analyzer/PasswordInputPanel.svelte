@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Panel from "$lib/components/ui/Panel.svelte";
   import { Eye, EyeOff } from "lucide-svelte";
 
   interface Props {
@@ -13,9 +14,7 @@
   }
 </script>
 
-<section class="input-panel">
-  <h2>Analyze Password Strength</h2>
-
+<Panel title="Password Input">
   <div class="input-group">
     <label for="password-input" class="input-label">
       Enter your password to analyze its strength
@@ -52,23 +51,9 @@
       </p>
     {/if}
   </div>
-</section>
+</Panel>
 
 <style>
-  .input-panel {
-    background: var(--md-sys-color-surface-container);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-large);
-    padding: 2rem;
-  }
-
-  h2 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin: 0 0 1.5rem 0;
-    color: var(--md-sys-color-on-surface);
-  }
-
   .input-group {
     display: flex;
     flex-direction: column;

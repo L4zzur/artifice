@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { PasswordStrengthInfo } from "$lib/api/generated";
+  import Panel from "$lib/components/ui/Panel.svelte";
   import PasswordStrength from "../PasswordStrength.svelte";
 
   interface Props {
@@ -10,9 +11,7 @@
   let { strengthInfo, hasPassword }: Props = $props();
 </script>
 
-<section class="analysis-panel">
-  <h2>Strength Analysis</h2>
-
+<Panel title="Strength Analysis">
   {#if !hasPassword}
     <div class="empty-state">
       <p>Enter a password to analyze its strength</p>
@@ -24,23 +23,9 @@
       <p>Analyzing password...</p>
     </div>
   {/if}
-</section>
+</Panel>
 
 <style>
-  .analysis-panel {
-    background: var(--md-sys-color-surface-container);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-large);
-    padding: 2rem;
-  }
-
-  h2 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin: 0 0 1.5rem 0;
-    color: var(--md-sys-color-on-surface);
-  }
-
   .empty-state {
     display: flex;
     flex-direction: column;
