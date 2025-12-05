@@ -66,7 +66,7 @@
     background: var(--md-sys-color-surface-container);
     border: 1px solid var(--md-sys-color-outline-variant);
     border-radius: var(--md-sys-shape-corner-large);
-    padding: 2rem;
+    padding: 1.5rem;
   }
 
   h2 {

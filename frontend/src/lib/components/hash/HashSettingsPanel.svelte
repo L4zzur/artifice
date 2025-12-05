@@ -116,20 +116,20 @@
     background: var(--md-sys-color-surface-container);
     border: 1px solid var(--md-sys-color-outline-variant);
     border-radius: var(--md-sys-shape-corner-large);
-    padding: 2rem;
+    padding: 1.5rem;
   }
 
   h2 {
     font-size: 1.25rem;
     font-weight: 600;
-    margin: 0 0 1.5rem 0;
+    margin: 0 0 1rem 0;
     color: var(--md-sys-color-on-surface);
   }
 
   .settings-grid {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.3rem;
   }
 
   .settings-row {
