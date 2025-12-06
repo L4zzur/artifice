@@ -2,6 +2,7 @@
   import { FileText, Upload, X } from "lucide-svelte";
   import Panel from "$lib/components/ui/Panel.svelte";
   import ModeToggle from "$lib/components/ui/ModeToggle.svelte";
+  import FileUpload from "$lib/components/ui/FileUpload.svelte";
 
   type InputMode = "text" | "file";
 
@@ -12,6 +13,7 @@
 
     onModeChange: (mode: InputMode) => void;
     onFileSelect: (file: File | null) => void;
+    onError: (message: string) => void;
 
     textLabel: string;
     textPlaceholder: string;
@@ -25,64 +27,17 @@
     uploadedFile = $bindable(),
     onModeChange,
     onFileSelect,
+    onError,
     textLabel,
     textPlaceholder,
     textRows,
     maxFileSizeMB,
   }: Props = $props();
 
-  let isDragging = $state(false);
-  let fileError = $state<string | null>(null);
-
   const modeOptions = [
     { value: "text" as const, label: "Text" },
     { value: "file" as const, label: "File" },
   ];
-
-  function handleFileInput(event: Event) {
-    const target = event.target as HTMLInputElement;
-    const selectedFile = target.files?.[0];
-    processFile(selectedFile);
-  }
-
-  function handleDrop(event: DragEvent) {
-    event.preventDefault();
-    isDragging = false;
-
-    const droppedFile = event.dataTransfer?.files[0];
-    processFile(droppedFile);
-  }
-
-  function handleDragOver(event: DragEvent) {
-    event.preventDefault();
-    isDragging = true;
-  }
-
-  function handleDragLeave() {
-    isDragging = false;
-  }
-
-  function processFile(selectedFile: File | undefined) {
-    fileError = null;
-
-    if (!selectedFile) {
-      return;
-    }
-
-    if (selectedFile.size > maxFileSizeMB * 1024 * 1024) {
-      fileError = `File size must be less than ${maxFileSizeMB}MB`;
-      return;
-    }
-
-    uploadedFile = selectedFile;
-    onFileSelect(selectedFile);
-  }
-
-  function removeFile() {
-    uploadedFile = null;
-    onFileSelect(null);
-    fileError = null;
-  }
 </script>
 
 <Panel height="240px">
@@ -119,54 +74,14 @@
       </div>
     {:else}
       <div class="file-section">
-        {#if !uploadedFile}
-          <div
-            class="dropzone {isDragging ? 'dragging' : ''}"
-            role="button"
-            tabindex="0"
-            ondrop={handleDrop}
-            ondragover={handleDragOver}
-            ondragleave={handleDragLeave}
-          >
-            <input
-              type="file"
-              id="file-input"
-              class="file-input"
-              onchange={handleFileInput}
-              aria-label="Upload file"
-            />
-
-            <label for="file-input" class="dropzone-label">
-              <Upload size={32} />
-              <p class="dropzone-title">
-                Drop file here or <span class="link">browse</span>
-              </p>
-              <p class="dropzone-hint">Maximum file size: {maxFileSizeMB}MB</p>
-            </label>
-          </div>
-        {:else}
-          <div class="file-preview">
-            <div class="file-icon">
-              <FileText size={32} />
-            </div>
-            <div class="file-info">
-              <p class="file-name">{uploadedFile.name}</p>
-              <p class="file-size">
-                {(uploadedFile.size / 1024 / 1024).toFixed(2)}MB
-              </p>
-            </div>
-            <button
-              class="remove-button"
-              onclick={removeFile}
-              aria-label="Remove file"
-            >
-              <X size={18} />
-            </button>
-          </div>
-        {/if}
-        {#if fileError}
-          <div class="error-box">{fileError}</div>
-        {/if}
+        <FileUpload
+          bind:file={uploadedFile}
+          {onFileSelect}
+          {onError}
+          maxSizeMB={maxFileSizeMB}
+          label="Drop file here or browse"
+          hint="Maximum file size: {maxFileSizeMB}MB"
+        />
       </div>
     {/if}
   </div>
@@ -240,123 +155,5 @@
     font-size: 0.75rem;
     color: var(--md-sys-color-on-surface-variant);
     opacity: 0.7;
-  }
-
-  .dropzone {
-    position: relative;
-    border: 2px dashed var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-medium);
-    padding: 1.5rem 1rem;
-    text-align: center;
-    transition: all 0.2s ease;
-    background: var(--md-sys-color-surface-container-high);
-    flex: 1;
-    min-height: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .dropzone:hover,
-  .dropzone.dragging {
-    border-color: var(--md-sys-color-primary);
-    background: rgba(176, 196, 222, 0.05);
-  }
-
-  .file-input {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-    overflow: hidden;
-  }
-
-  .dropzone-label {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    cursor: pointer;
-    color: var(--md-sys-color-on-surface-variant);
-  }
-
-  .dropzone-title {
-    margin: 0;
-    font-size: 0.9375rem;
-    font-weight: 500;
-    color: var(--md-sys-color-on-surface);
-  }
-
-  .link {
-    color: var(--md-sys-color-primary);
-    text-decoration: underline;
-  }
-
-  .dropzone-hint {
-    margin: 0;
-    font-size: 0.8125rem;
-    color: var(--md-sys-color-on-surface-variant);
-  }
-
-  .file-preview {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background: var(--md-sys-color-surface-container-high);
-    border: 1px solid var(--md-sys-color-outline-variant);
-    border-radius: var(--md-sys-shape-corner-medium);
-    flex-shrink: 0;
-  }
-
-  .file-icon {
-    padding: 0.5rem;
-    background: var(--md-sys-color-primary-container);
-    color: var(--md-sys-color-on-primary-container);
-    border-radius: var(--md-sys-shape-corner-small);
-  }
-
-  .file-info {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .file-name {
-    margin: 0 0 0.25rem 0;
-    font-size: 0.9375rem;
-    font-weight: 500;
-    color: var(--md-sys-color-on-surface);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .file-size {
-    margin: 0;
-    font-size: 0.8125rem;
-    color: var(--md-sys-color-on-surface-variant);
-  }
-
-  .remove-button {
-    padding: 0.5rem;
-    background: none;
-    border: none;
-    color: var(--md-sys-color-error);
-    border-radius: var(--md-sys-shape-corner-small);
-    cursor: pointer;
-    transition: background 0.2s ease;
-  }
-
-  .remove-button:hover {
-    background: var(--md-sys-color-error-container);
-  }
-
-  .error-box {
-    margin-top: 0.75rem;
-    padding: 0.75rem;
-    background: var(--md-sys-color-error-container);
-    color: var(--md-sys-color-on-error-container);
-    border-radius: var(--md-sys-shape-corner-small);
-    font-size: 0.875rem;
   }
 </style>
