@@ -1,0 +1,1 @@
+pnpm run dev -- --open --host
