@@ -13,6 +13,7 @@
   import Toast from "$lib/components/ui/Toast.svelte";
   import { CircleCheckBig, CircleX } from "lucide-svelte";
   import ExpectedHashInput from "$lib/components/hash/verifier/ExpectedHashInput.svelte";
+  import ErrorBanner from "$lib/components/ui/ErrorBanner.svelte";
 
   type InputMode = "text" | "file";
 
@@ -184,12 +185,7 @@
     {/snippet}
   </PageHeader>
 
-  {#if error}
-    <div class="error-message">
-      <CircleX size={18} />
-      {error}
-    </div>
-  {/if}
+  <ErrorBanner message={error} onDismiss={() => (error = null)} />
 
   <div class="verifier-layout">
     <div class="left-column">
@@ -199,6 +195,7 @@
         bind:inputMode
         onModeChange={handleModeChange}
         onFileSelect={handleFileSelect}
+        onError={handleFileError}
         textLabel={inputMode === "text" ? "Data to verify" : "File to verify"}
         textPlaceholder="Original data to verify..."
         textRows={2}
@@ -246,17 +243,5 @@
     .verifier-layout {
       grid-template-columns: 1fr;
     }
-  }
-
-  .error-message {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
-    padding: 0.75rem;
-    background: var(--md-sys-color-error-container);
-    color: var(--md-sys-color-on-error-container);
-    border-radius: var(--md-sys-shape-corner-medium);
-    font-size: 0.9rem;
   }
 </style>

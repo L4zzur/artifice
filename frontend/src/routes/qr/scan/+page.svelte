@@ -6,6 +6,7 @@
   import Panel from "$lib/components/ui/Panel.svelte";
   import Spinner from "$lib/components/ui/Spinner.svelte";
   import Toast from "$lib/components/ui/Toast.svelte";
+  import ErrorBanner from "$lib/components/ui/ErrorBanner.svelte";
   import {
     CircleCheckBig,
     CircleX,
@@ -122,12 +123,7 @@
     {/snippet}
   </PageHeader>
 
-  {#if error}
-    <div class="error-message">
-      <CircleX size={18} />
-      {error}
-    </div>
-  {/if}
+  <ErrorBanner message={error} onDismiss={() => (error = null)} />
 
   <div class="scanner-layout">
     <Panel title="Settings">
@@ -136,7 +132,7 @@
           preview={imagePreview}
           label="Upload image containing QR code"
           hint="PNG, JPG, WEBP up to 5MB"
-          maxSize={5}
+          maxSizeMB={5}
           onUpload={handleImageUpload}
           onRemove={handleImageRemove}
           onError={(msg) => (error = msg)}
@@ -248,18 +244,6 @@
     flex-direction: column;
     min-height: 0;
     margin-bottom: 1rem;
-  }
-
-  .error-message {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
-    padding: 0.75rem;
-    background: var(--md-sys-color-error-container);
-    color: var(--md-sys-color-on-error-container);
-    border-radius: var(--md-sys-shape-corner-medium);
-    font-size: 0.9rem;
   }
 
   .placeholder {

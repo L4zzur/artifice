@@ -11,7 +11,8 @@
   import HashSettingsPanel from "$lib/components/hash/HashSettingsPanel.svelte";
   import PageHeader from "$lib/components/ui/PageHeader.svelte";
   import Toast from "$lib/components/ui/Toast.svelte";
-  import { CircleX, Sparkles } from "lucide-svelte";
+  import { Sparkles } from "lucide-svelte";
+  import ErrorBanner from "$lib/components/ui/ErrorBanner.svelte";
 
   type InputMode = "text" | "file";
 
@@ -133,6 +134,7 @@
 
   function handleFileSelect(file: File | null) {
     uploadedFile = file;
+    error = null;
     if (file) {
       handleGenerate();
     } else {
@@ -150,6 +152,12 @@
       console.error("Failed to copy hash.");
       showToast("Failed to copy hash");
     }
+  }
+
+  function handleFileError(message: string) {
+    error = message;
+    uploadedFile = null;
+    generatedHash = null;
   }
 
   function showToast(message: string, duration: number = 4000) {
@@ -190,12 +198,7 @@
     {/snippet}
   </PageHeader>
 
-  {#if error}
-    <div class="error-message">
-      <CircleX size={18} />
-      {error}
-    </div>
-  {/if}
+  <ErrorBanner message={error} onDismiss={() => (error = null)} />
 
   <div class="generator-layout">
     <div class="left-column">
@@ -205,6 +208,7 @@
         bind:inputMode
         onModeChange={handleModeChange}
         onFileSelect={handleFileSelect}
+        onError={handleFileError}
         textLabel="Data to hash"
         textPlaceholder="Hello, World!"
         textRows={2}
@@ -245,17 +249,5 @@
     .generator-layout {
       grid-template-columns: 1fr;
     }
-  }
-
-  .error-message {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
-    padding: 0.75rem;
-    background: var(--md-sys-color-error-container);
-    color: var(--md-sys-color-on-error-container);
-    border-radius: var(--md-sys-shape-corner-medium);
-    font-size: 0.9rem;
   }
 </style>

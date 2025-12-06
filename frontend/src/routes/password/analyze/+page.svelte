@@ -3,6 +3,7 @@
   import { analyzePassword } from "$lib/api/password";
   import PasswordAnalysisPanel from "$lib/components/password/analyzer/PasswordAnalysisPanel.svelte";
   import PasswordInputPanel from "$lib/components/password/analyzer/PasswordInputPanel.svelte";
+  import ErrorBanner from "$lib/components/ui/ErrorBanner.svelte";
   import PageHeader from "$lib/components/ui/PageHeader.svelte";
   import Toast from "$lib/components/ui/Toast.svelte";
   import { CircleX, ShieldCheck } from "lucide-svelte";
@@ -78,12 +79,7 @@
     {/snippet}
   </PageHeader>
 
-  {#if error}
-    <div class="error-message">
-      <CircleX size={18} />
-      {error}
-    </div>
-  {/if}
+  <ErrorBanner message={error} onDismiss={() => (error = null)} />
 
   <div class="analyzer-layout">
     <PasswordInputPanel bind:password />
@@ -116,17 +112,5 @@
     .analyzer-layout {
       grid-template-columns: 1fr;
     }
-  }
-
-  .error-message {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
-    padding: 0.75rem;
-    background: var(--md-sys-color-error-container);
-    color: var(--md-sys-color-on-error-container);
-    border-radius: var(--md-sys-shape-corner-medium);
-    font-size: 0.9rem;
   }
 </style>

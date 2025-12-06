@@ -6,6 +6,7 @@
   import { generatePassword } from "$lib/api/password";
   import PasswordResultPanel from "$lib/components/password/generator/PasswordResultPanel.svelte";
   import PasswordSettingsPanel from "$lib/components/password/generator/PasswordSettingsPanel.svelte";
+  import ErrorBanner from "$lib/components/ui/ErrorBanner.svelte";
   import PageHeader from "$lib/components/ui/PageHeader.svelte";
   import Toast from "$lib/components/ui/Toast.svelte";
   import { CircleX, ShieldPlus } from "lucide-svelte";
@@ -111,12 +112,7 @@
     {/snippet}
   </PageHeader>
 
-  {#if error}
-    <div class="error-message">
-      <CircleX size={18} />
-      {error}
-    </div>
-  {/if}
+  <ErrorBanner message={error} onDismiss={() => (error = null)} />
 
   <div class="generator-layout">
     <PasswordSettingsPanel
@@ -158,17 +154,5 @@
     .generator-layout {
       grid-template-columns: 1fr;
     }
-  }
-
-  .error-message {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
-    padding: 0.75rem;
-    background: var(--md-sys-color-error-container);
-    color: var(--md-sys-color-on-error-container);
-    border-radius: var(--md-sys-shape-corner-medium);
-    font-size: 0.9rem;
   }
 </style>

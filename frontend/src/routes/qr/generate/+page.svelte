@@ -21,6 +21,7 @@
   import Button from "$lib/components/ui/Button.svelte";
   import PageHeader from "$lib/components/ui/PageHeader.svelte";
   import Panel from "$lib/components/ui/Panel.svelte";
+  import ErrorBanner from "$lib/components/ui/ErrorBanner.svelte";
 
   let qrData = $state("https://example.com");
   let errorCorrection = $state<ErrorCorrectionLevel>("M");
@@ -105,6 +106,11 @@
     embeddedImagePreview = null;
   }
 
+  function handleLogoError(message: string) {
+    error = message;
+    removeLogo();
+  }
+
   function handleColorMaskImageUpload(imagebase64: string) {
     colorMaskImageBase64 = imagebase64;
     colorMaskImagePreview = imagebase64;
@@ -117,6 +123,11 @@
   function removeColorMaskImage() {
     colorMaskImageBase64 = null;
     colorMaskImagePreview = null;
+  }
+
+  function handleColorMaskImageError(message: string) {
+    error = message;
+    removeColorMaskImage();
   }
 
   const adjustBackgroundColor = (color: string): string => {
@@ -262,12 +273,7 @@
     {/snippet}
   </PageHeader>
 
-  {#if error}
-    <div class="error-message">
-      <CircleX size={18} />
-      {error}
-    </div>
-  {/if}
+  <ErrorBanner message={error} onDismiss={() => (error = null)} />
 
   <div class="generator-layout">
     <Panel title="Settings">
@@ -322,7 +328,7 @@
           bind:colorMaskImagePreview
           onImageUpload={handleColorMaskImageUpload}
           onImageRemove={removeColorMaskImage}
-          onError={(msg) => (error = msg)}
+          onError={handleColorMaskImageError}
         />
       {/if}
 
@@ -334,7 +340,7 @@
             hint="PNG, JPG, WEBP up to 3MB"
             onUpload={handleLogoUpload}
             onRemove={removeLogo}
-            onError={(msg) => (error = msg)}
+            onError={handleLogoError}
           />
         </div>
 
@@ -395,19 +401,6 @@
     display: flex;
     flex-direction: column;
     min-height: 0;
-    margin-bottom: 1rem;
-  }
-
-  .error-message {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
-    padding: 0.75rem;
-    background: var(--md-sys-color-error-container);
-    color: var(--md-sys-color-on-error-container);
-    border-radius: var(--md-sys-shape-corner-medium);
-    font-size: 0.9rem;
   }
 
   .info-banner {
@@ -415,7 +408,7 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.75rem 1rem;
-    margin-bottom: 1rem;
+    margin-top: 1rem;
     background: var(--md-sys-color-tertiary-container);
     color: var(--md-sys-color-on-tertiary-container);
     border-radius: var(--md-sys-shape-corner-small);
