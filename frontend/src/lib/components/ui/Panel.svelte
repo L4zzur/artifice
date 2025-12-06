@@ -46,14 +46,14 @@
   }
 
   .panel-header {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     flex-shrink: 0;
   }
 
   .panel-title {
     font-size: 1.25rem;
     font-weight: 600;
-    margin: 0 0 1.5rem 0;
+    margin: 0 0 0.75rem 0;
     color: var(--md-sys-color-on-surface);
     flex-shrink: 0;
   }
@@ -61,7 +61,7 @@
   .panel-content {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.5rem;
     flex: 1;
     min-height: 0;
   }

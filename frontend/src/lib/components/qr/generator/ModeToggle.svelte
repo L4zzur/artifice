@@ -36,7 +36,6 @@
   .mode-toggle {
     display: flex;
     gap: 0.5rem;
-    margin-bottom: 1.5rem;
     padding: 0.25rem;
     background: var(--md-sys-color-surface-container-high);
     border-radius: var(--md-sys-shape-corner-medium);
