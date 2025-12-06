@@ -1,12 +1,13 @@
 <script lang="ts">
   import { ImageIcon } from "lucide-svelte";
   import Button from "./Button.svelte";
+  import FileUpload from "./FileUpload.svelte";
 
   interface Props {
     preview: string | null;
     label?: string;
     hint?: string;
-    maxSize?: number; // in MB
+    maxSizeMB?: number;
     accept?: string;
     onUpload: (base64: string) => void;
     onRemove: () => void;
@@ -17,7 +18,7 @@
     preview = $bindable(),
     label = "Upload image",
     hint = "PNG, JPG, WEBP up to 3MB",
-    maxSize = 3,
+    maxSizeMB = 3,
     accept = "image/*",
     onUpload,
     onRemove,
@@ -25,12 +26,14 @@
   }: Props = $props();
 
   const id = "image-upload-" + Math.random().toString(36).slice(2);
+  let imageFile = $state<File | null>(null);
 
-  function handleFileChange(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-
-    if (!file) return;
+  function handleFileSelect(file: File | null) {
+    if (!file) {
+      imageFile = null;
+      preview = null;
+      return;
+    }
 
     if (
       !file.type.startsWith("image/") ||
@@ -42,8 +45,8 @@
       return;
     }
 
-    if (file.size > maxSize * 1024 * 1024) {
-      onError?.(`Image file size should be less than ${maxSize} MB`);
+    if (file.size > maxSizeMB * 1024 * 1024) {
+      onError?.(`Image file size should be less than ${maxSizeMB} MB`);
       return;
     }
 
@@ -63,19 +66,16 @@
 </script>
 
 {#if !preview}
-  <div class="upload-area">
-    <input
-      type="file"
-      {accept}
-      onchange={handleFileChange}
-      {id}
-      style="display: none;"
+  <div class="upload-container">
+    <FileUpload
+      bind:file={imageFile}
+      onFileSelect={handleFileSelect}
+      accept="image/jpeg,image/png,image/webp"
+      {maxSizeMB}
+      {label}
+      {hint}
+      showPreview={false}
     />
-    <label for={id} class="upload-label">
-      <ImageIcon size={32} />
-      <span>{label}</span>
-      <small>{hint}</small>
-    </label>
   </div>
 {:else}
   <div class="uploaded-preview">
